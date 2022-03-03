@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using VendorDeck.API.ActionFilters;
+using VendorDeck.Business.Containers;
 using VendorDeck.DataAccess.Context;
 
 namespace API
@@ -33,7 +35,8 @@ namespace API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
             });
-
+            services.AddScoped(typeof(ValidId<>));
+            services.AddDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

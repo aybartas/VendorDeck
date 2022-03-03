@@ -22,7 +22,7 @@ namespace VendorDeck.DataAccess.Concrete
         public async Task DeleteAsync(T entity)
         {
             using var context = new VendorDeckContext();
-            context.Remove<T>(entity);
+            context.Remove(entity);
             await context.SaveChangesAsync();
         }
 

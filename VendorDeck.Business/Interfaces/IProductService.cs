@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using VendorDeck.Entities.Concrete;
 
-namespace VendorDeck.DataAccess.Interfaces
+namespace VendorDeck.Business.Interfaces
 {
-    public interface IProductRepository : IGenericRepository<Product>
+    public interface IProductService : IGenericService<Product>
     {
 
     }
