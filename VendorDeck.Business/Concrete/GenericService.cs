@@ -11,7 +11,7 @@ namespace VendorDeck.Business.Concrete
 {
     public class GenericService<T> : IGenericService<T> where T : class
     {
-        private readonly IGenericRepository<T> genericRepository;
+        public readonly IGenericRepository<T> genericRepository;
 
         public GenericService(IGenericRepository<T> genericRepository)
         {
