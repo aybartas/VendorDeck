@@ -14,6 +14,7 @@ namespace VendorDeck.DataAccess.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<BasketItem>().ToTable("BasketItems");
             modelBuilder.ApplyConfiguration(new ProductMap());
         }
 

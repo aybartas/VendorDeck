@@ -5,13 +5,13 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VendorDeck.API", "VendorDeck.API\VendorDeck.API.csproj", "{3CAA6F9D-60F5-463E-AF65-36289F3F6F59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VendorDeck.Entities", "VendorDeck.Entities\VendorDeck.Entities.csproj", "{0207BD5A-7774-4800-AB38-5EE513956B6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VendorDeck.Entities", "VendorDeck.Entities\VendorDeck.Entities.csproj", "{0207BD5A-7774-4800-AB38-5EE513956B6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VendorDeck.DataAccess", "VendorDeck.DataAccess\VendorDeck.DataAccess.csproj", "{1D02718C-A3E3-421F-A81E-C48D012006EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VendorDeck.DataAccess", "VendorDeck.DataAccess\VendorDeck.DataAccess.csproj", "{1D02718C-A3E3-421F-A81E-C48D012006EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VendorDeck.Business", "VendorDeck.Business\VendorDeck.Business.csproj", "{54D5487F-95B8-471C-A772-1267B81CA75F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VendorDeck.Business", "VendorDeck.Business\VendorDeck.Business.csproj", "{54D5487F-95B8-471C-A772-1267B81CA75F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VendorDeck.Tests", "VendorDeck.Tests\VendorDeck.Tests.csproj", "{9F5FADD4-C6FD-4DD8-AB13-005D3699A149}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VendorDeck.Tests", "VendorDeck.Tests\VendorDeck.Tests.csproj", "{9F5FADD4-C6FD-4DD8-AB13-005D3699A149}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -11,8 +11,11 @@ namespace VendorDeck.Business.Concrete
 {
     public class BasketService : GenericService<Basket> , IBasketService
     {
-        public BasketService(IGenericRepository<Basket> genericRepository) : base(genericRepository)
-        {  
+        private readonly IBasketRepository basketRepository;
+
+        public BasketService(IGenericRepository<Basket> genericRepository, IBasketRepository basketRepository) : base(genericRepository)
+        {
+            this.basketRepository = basketRepository;
         }
         public async void AddItemToBasket(Basket basket, Product product, int quantity)
         {
@@ -25,10 +28,14 @@ namespace VendorDeck.Business.Concrete
             {
                 basket.BasketItems.Add(new BasketItem { Product = product, Quantity = quantity });
             }
-
             await genericRepository.UpdateAsync(basket);
-
         }
+
+        public async Task<Basket> GetBasketWithBasketItems(int customerId)
+        {
+            return await basketRepository.GetBasketWithItemsAsync(customerId);
+        }
+
         public async void RemoveItemFromBasket(Basket basket, Product product, int quantity)
         {
             var existingItem = basket.BasketItems.FirstOrDefault(I => I.ProductId == product.Id);
@@ -37,11 +44,11 @@ namespace VendorDeck.Business.Concrete
             
             existingItem.Quantity -= quantity;
             
-            if( existingItem != null && existingItem.Quantity == 0)
+            if(existingItem.Quantity == 0)
             {
                 basket.BasketItems.Remove(existingItem);
             }
-            
+            await genericRepository.UpdateAsync(basket);
         }
     }
 }
