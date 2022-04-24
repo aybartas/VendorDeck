@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using VendorDeck.Business.Interfaces;
+using VendorDeck.Entities.Concrete;
 
 namespace VendorDeck.API.Controllers
 {
@@ -11,9 +13,12 @@ namespace VendorDeck.API.Controllers
     public class BasketController : ControllerBase
     {
         private readonly IBasketService basketService;
-        public BasketController(IBasketService basketService)
+        private readonly IProductService productService;
+
+        public BasketController(IBasketService basketService, IProductService productService)
         {
             this.basketService = basketService;
+            this.productService = productService;
         }
 
         [HttpGet]
@@ -31,13 +36,30 @@ namespace VendorDeck.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBasket(int productId,int quantity)
         {
-            // get basket
-            // create basket
-            // get product
-            // add item
-            // save
+            var customerId = int.Parse(Request.Cookies["customerId"]);
+            var basket = await basketService.GetAsync(I => I.CustomerId == customerId);
 
-             return Ok();
+            if (basket == null)
+            {
+                var buyerId = Guid.NewGuid().ToString();
+                var cookieOptions = new CookieOptions {
+                    IsEssential = true,
+                    Expires = DateTime.Now.AddDays(30),
+                };
+
+                Response.Cookies.Append("customerId", buyerId, cookieOptions);
+
+                await basketService.AddAsync(new Basket { CustomerId = int.Parse(buyerId) });
+            }
+
+            var product = await productService.FindByIdAsync(productId);
+            var currentBasket  = basketService.GetAsync(I => I.CustomerId == customerId).Result.First();
+
+            if (product == null) return NotFound();
+
+            basketService.AddItemToBasket(currentBasket, product, quantity);
+
+            return Created("", currentBasket);
         }
 
         [HttpDelete]

@@ -11,8 +11,6 @@ namespace VendorDeck.Business.Interfaces
     {
         void AddItemToBasket(Basket basket, Product product, int quantity);
         void RemoveItemFromBasket(Basket basket, Product product, int quantity);
-
         Task<Basket> GetBasketWithBasketItems(int customerId);
-
     }
 }

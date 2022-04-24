@@ -50,5 +50,6 @@ namespace VendorDeck.Business.Concrete
             }
             await genericRepository.UpdateAsync(basket);
         }
+
     }
 }

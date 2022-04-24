@@ -29,7 +29,7 @@ namespace VendorDeck.API.Controllers
         [ServiceFilter(typeof(ValidId<Product>))]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await productService.FindById(id);
+            var product = await productService.FindByIdAsync(id);
             return Ok(product);
 
         }
