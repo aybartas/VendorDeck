@@ -31,9 +31,9 @@ namespace VendorDeck.Business.Concrete
             await genericRepository.UpdateAsync(basket);
         }
 
-        public async Task<Basket> GetBasketWithBasketItems(int customerId)
+        public async Task<Basket> GetBasketWithBasketItems(string buyerId)
         {
-            return await basketRepository.GetBasketWithItemsAsync(customerId);
+            return await basketRepository.GetBasketWithItemsAsync(buyerId);
         }
 
         public async void RemoveItemFromBasket(Basket basket, Product product, int quantity)

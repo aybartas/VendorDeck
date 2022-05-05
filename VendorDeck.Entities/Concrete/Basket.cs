@@ -10,7 +10,7 @@ namespace VendorDeck.Entities.Concrete
     public class Basket : ITable
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public string BuyerId { get; set; }
         public List<BasketItem> BasketItems { get; set; } = new();
 
     }

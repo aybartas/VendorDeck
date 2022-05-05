@@ -1,4 +1,6 @@
-﻿namespace VendorDeck.Entities.Concrete
+﻿using System.Text.Json.Serialization;
+
+namespace VendorDeck.Entities.Concrete
 {
     public class BasketItem
     {

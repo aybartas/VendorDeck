@@ -9,6 +9,6 @@ namespace VendorDeck.DataAccess.Interfaces
 {
     public interface IBasketRepository
     {
-        Task<Basket> GetBasketWithItemsAsync(int customerId);
+        Task<Basket> GetBasketWithItemsAsync(string buyerId);
     }
 }

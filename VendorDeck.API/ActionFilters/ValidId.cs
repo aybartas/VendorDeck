@@ -19,7 +19,7 @@ namespace VendorDeck.API.ActionFilters
         {
             var parameterDict = context.ActionArguments.Where(I => I.Key.Equals("id")).FirstOrDefault();
             var requestedId = (int)parameterDict.Value;
-            var entity = genericService.FindById(requestedId).Result;
+            var entity =   genericService.FindByIdAsync(requestedId).Result;
 
             if (entity == null) 
                 context.Result = new NotFoundObjectResult($"There is no object with Id: {requestedId}");
