@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using VendorDeck.Business.Interfaces;
 using VendorDeck.Entities.Concrete;
+using VendorDeck.Entities.Dtos;
 
 namespace VendorDeck.API.Controllers
 {
@@ -14,28 +16,30 @@ namespace VendorDeck.API.Controllers
     {
         private readonly IBasketService basketService;
         private readonly IProductService productService;
+        private readonly IMapper mapper;
 
-        public BasketController(IBasketService basketService, IProductService productService)
+        public BasketController(IBasketService basketService, IProductService productService, IMapper mapper)
         {
             this.basketService = basketService;
             this.productService = productService;
+            this.mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetBasket")]
         public async Task<IActionResult> GetBasket()
         {
             var buyerId = Request.Cookies["buyerId"];
 
-            if (buyerId == null)
+            var basket = await basketService.GetBasketWithBasketItems(buyerId);
+
+            if (basket == null || buyerId == null)
             {
                 return NotFound();
             }
 
-            var basket = await basketService.GetBasketWithBasketItems(buyerId);
+            var basketDto = mapper.Map<BasketDto>(basket);
 
-            if (basket == null) return NotFound();
-
-            return Ok(basket);
+            return Ok(basketDto);
         }
 
         [HttpPost]
@@ -52,9 +56,9 @@ namespace VendorDeck.API.Controllers
             if(basket != null)
             {
                 basketService.AddItemToBasket(basket, product, quantity);
-                return Created("", basket);
+                return Created("", mapper.Map<BasketDto>(basket));
             }
-
+            
             buyerId = Guid.NewGuid().ToString();
             var cookieOptions = new CookieOptions {
                 IsEssential = true,
@@ -62,20 +66,37 @@ namespace VendorDeck.API.Controllers
             };
 
             Response.Cookies.Append("buyerId", buyerId, cookieOptions);
-            await basketService.AddAsync(new Basket { BuyerId = buyerId });
-            
-            basketService.AddItemToBasket(basketService.GetBasketWithBasketItems(buyerId).Result, product, quantity);
 
-            return Created("", basket);
+            // create new basket 
+
+            var newBasket = new Basket
+            {
+                BuyerId = buyerId,
+                BasketItems = { new BasketItem { Quantity = quantity, ProductId = productId} }
+            };
+
+            await basketService.AddAsync(newBasket);
+            
+            return CreatedAtRoute("GetBasket", mapper.Map<BasketDto>(newBasket));
         }
 
         [HttpDelete]
-        public async Task<IActionResult> RemoveBasket(int productId, int quantity)
+        public async Task<IActionResult> RemoveBasketItem(int productId, int quantity)
         {
             // get basket
-            // remove item or reduce quantity
+            var buyerId = Request.Cookies["buyerId"];
+
+            var basket = await basketService.GetBasketWithBasketItems(buyerId);
+
+            if (basket == null || buyerId == null)
+            {
+                return NotFound();
+            }
+
+            basketService.RemoveItemFromBasket(basket, productId, quantity);
+
             // save
-            return Ok();
+            return NoContent();
         }
     }
 }

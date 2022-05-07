@@ -10,7 +10,7 @@ namespace VendorDeck.Business.Interfaces
     public interface IBasketService : IGenericService<Basket>
     {
         void AddItemToBasket(Basket basket, Product product, int quantity);
-        void RemoveItemFromBasket(Basket basket, Product product, int quantity);
+        void RemoveItemFromBasket(Basket basket, int productId, int quantity);
         Task<Basket> GetBasketWithBasketItems(string buyerId);
     }
 }

@@ -36,20 +36,19 @@ namespace VendorDeck.Business.Concrete
             return await basketRepository.GetBasketWithItemsAsync(buyerId);
         }
 
-        public async void RemoveItemFromBasket(Basket basket, Product product, int quantity)
+        public async void RemoveItemFromBasket(Basket basket, int productId, int quantity)
         {
-            var existingItem = basket.BasketItems.FirstOrDefault(I => I.ProductId == product.Id);
+            var existingItem = basket.BasketItems.FirstOrDefault(I => I.ProductId == productId);
             
             if (existingItem == null) return;
             
             existingItem.Quantity -= quantity;
             
-            if(existingItem.Quantity == 0)
+            if(existingItem.Quantity <= 0)
             {
                 basket.BasketItems.Remove(existingItem);
             }
             await genericRepository.UpdateAsync(basket);
         }
-
     }
 }

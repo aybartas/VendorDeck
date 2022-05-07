@@ -32,11 +32,11 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                });
+            services.AddControllers();
+                //.AddNewtonsoftJson(options =>
+                //{
+                //    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                //});
 
             services.AddSwaggerGen(c =>
             {
@@ -45,6 +45,8 @@ namespace API
             services.AddScoped(typeof(ValidId<>));
             services.AddDependencies();
             services.AddCors();
+            services.AddAutoMapper(typeof(Startup));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +68,7 @@ namespace API
             {
                 option.AllowAnyHeader()
                 .AllowAnyMethod()
+                .AllowCredentials()
                 .WithOrigins("http://localhost:3000", "https://localhost:3000");
             });
 
