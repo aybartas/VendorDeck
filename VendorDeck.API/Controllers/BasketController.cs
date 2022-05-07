@@ -43,9 +43,9 @@ namespace VendorDeck.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBasket(int productId,int quantity)
+        public async Task<IActionResult> AddBasket( [FromBody]AddBasketDto basketItem)
         {
-            var product = await productService.FindByIdAsync(productId);
+            var product = await productService.FindByIdAsync(basketItem.ProductId);
 
             if (product == null) 
                 return NotFound();
@@ -55,7 +55,7 @@ namespace VendorDeck.API.Controllers
             
             if(basket != null)
             {
-                basketService.AddItemToBasket(basket, product, quantity);
+                basketService.AddItemToBasket(basket, product, basketItem.Quantity);
                 return Created("", mapper.Map<BasketDto>(basket));
             }
             
@@ -72,7 +72,7 @@ namespace VendorDeck.API.Controllers
             var newBasket = new Basket
             {
                 BuyerId = buyerId,
-                BasketItems = { new BasketItem { Quantity = quantity, ProductId = productId} }
+                BasketItems = { new BasketItem { Quantity = basketItem.Quantity, ProductId = basketItem.ProductId} }
             };
 
             await basketService.AddAsync(newBasket);
