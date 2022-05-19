@@ -16,6 +16,9 @@ namespace VendorDeck.DataAccess.Context
         {
             modelBuilder.Entity<BasketItem>().ToTable("BasketItems");
             modelBuilder.ApplyConfiguration(new ProductMap());
+            modelBuilder.ApplyConfiguration(new BasketMap());
+            modelBuilder.ApplyConfiguration(new BasketItemMap());
+
         }
 
         public DbSet<Product> Products { get; set; }

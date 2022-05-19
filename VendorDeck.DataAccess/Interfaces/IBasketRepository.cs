@@ -7,7 +7,7 @@ using VendorDeck.Entities.Concrete;
 
 namespace VendorDeck.DataAccess.Interfaces
 {
-    public interface IBasketRepository
+    public interface IBasketRepository : IGenericRepository<Basket>
     {
         Task<Basket> GetBasketWithItemsAsync(string buyerId);
     }
