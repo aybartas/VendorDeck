@@ -20,6 +20,7 @@ namespace API
                 logging.ClearProviders();
                 logging.AddDebug();
                 logging.AddConsole();
+                logging.SetMinimumLevel(LogLevel.Information);
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
