@@ -53,7 +53,8 @@ namespace API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<ExceptionMiddleware>();
-            
+            app.UseMiddleware<RequestResponseMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
