@@ -12,6 +12,9 @@ namespace VendorDeck.DataAccess.Concrete
 {
     public class BasketRepository : GenericRepository<Basket>, IBasketRepository
     {
+        public BasketRepository(VendorDeckContext context) : base(context)
+        {
+        }
 
         public async Task<Basket> GetBasketWithItemsAsync(string buyerId)
         {

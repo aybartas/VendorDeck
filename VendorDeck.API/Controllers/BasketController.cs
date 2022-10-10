@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using VendorDeck.Business.Interfaces;
+using VendorDeck.DataAccess.Interfaces;
 using VendorDeck.Entities.Concrete;
 using VendorDeck.Entities.Dtos;
 
@@ -76,7 +77,7 @@ namespace VendorDeck.API.Controllers
             };
 
             await basketService.AddAsync(newBasket);
-            
+
             return CreatedAtRoute("GetBasket", mapper.Map<BasketDto>(newBasket));
         }
 
@@ -94,7 +95,7 @@ namespace VendorDeck.API.Controllers
             }
 
             basketService.RemoveItemFromBasket(basket, productId, quantity);
-
+            
             // save
             return NoContent();
         }

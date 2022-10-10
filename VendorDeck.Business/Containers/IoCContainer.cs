@@ -19,7 +19,7 @@ namespace VendorDeck.Business.Containers
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IBasketRepository, BasketRepository>();
 
-            services.AddScoped<IBasketItemRepository, BasketItemRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
         }

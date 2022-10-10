@@ -11,21 +11,26 @@ namespace VendorDeck.Business.Concrete
 {
     public class GenericService<T> : IGenericService<T> where T : class
     {
-        public readonly IGenericRepository<T> genericRepository;
 
-        public GenericService(IGenericRepository<T> genericRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepository<T> genericRepository;
+
+        public GenericService(IUnitOfWork unitOfWork)
         {
-            this.genericRepository = genericRepository;
+            _unitOfWork = unitOfWork;
+            genericRepository = _unitOfWork.GetGenericRepository<T>();
         }
 
         public async Task AddAsync(T entity)
         {
             await genericRepository.AddAsync(entity);
+            await _unitOfWork.Complete();
         }
 
-        public async Task DeleteAsync(T entity)
+        public async Task Remove(T entity)
         {
-            await genericRepository.DeleteAsync(entity);
+             genericRepository.Remove(entity);
+            await _unitOfWork.Complete();
         }
 
         public async Task<T> FindByIdAsync(int id)
@@ -43,9 +48,10 @@ namespace VendorDeck.Business.Concrete
             return await genericRepository.GetAsync(filter);
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task Update(T entity)
         {
-            await genericRepository.UpdateAsync(entity);
+            genericRepository.Update(entity);
+            await _unitOfWork.Complete();
         }
     }
 }

@@ -11,15 +11,14 @@ namespace VendorDeck.Business.Concrete
 {
     public class BasketService : GenericService<Basket> , IBasketService
     {
-        private readonly IBasketRepository basketRepository;
-        private readonly IBasketItemRepository basketItemRepository;   
 
-        public BasketService(IGenericRepository<Basket> genericRepository, IBasketRepository basketRepository, IBasketItemRepository basketItemRepository) : base(genericRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public BasketService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            this.basketRepository = basketRepository;
-            this.basketItemRepository = basketItemRepository;
-    }
-        public async void AddItemToBasket(Basket basket, Product product, int quantity)
+            _unitOfWork = unitOfWork;
+        }
+        public void AddItemToBasket(Basket basket, Product product, int quantity)
         {
             var existingItem = basket.BasketItems.FirstOrDefault(I => I.ProductId == product.Id);
             if (existingItem != null)
@@ -30,15 +29,15 @@ namespace VendorDeck.Business.Concrete
             {
                 basket.BasketItems.Add(new BasketItem { Product = product, Quantity = quantity });
             }
-            await basketRepository.UpdateAsync(basket);
+            _unitOfWork.BasketRepository.Update(basket);
         }
 
         public async Task<Basket> GetBasketWithBasketItems(string buyerId)
         {
-            return await basketRepository.GetBasketWithItemsAsync(buyerId);
+            return await _unitOfWork.BasketRepository.GetBasketWithItemsAsync(buyerId);
         }
 
-        public async void RemoveItemFromBasket(Basket basket, int productId, int quantity)
+        public async Task RemoveItemFromBasket(Basket basket, int productId, int quantity)
         {
             var existingItem = basket.BasketItems.FirstOrDefault(I => I.ProductId == productId);
             
@@ -49,12 +48,14 @@ namespace VendorDeck.Business.Concrete
             // clear basket items on entity
             if(existingItem.Quantity <= 0)
             {
-                await basketItemRepository.DeleteAsync(existingItem);
+                _unitOfWork.GetGenericRepository<BasketItem>().Remove(existingItem);
                 basket.BasketItems.Remove(existingItem);
                 
             }
 
-            await basketRepository.UpdateAsync(basket);
+            _unitOfWork.BasketRepository.Update(basket);
+            await _unitOfWork.Complete();
+
         }
     }
 }

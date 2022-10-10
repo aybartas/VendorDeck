@@ -24,7 +24,7 @@ namespace VendorDeck.API.Middleware
         {
             try
             {
-                await next(context);
+                await next.Invoke(context);
             }
             catch (System.Exception ex)
             {

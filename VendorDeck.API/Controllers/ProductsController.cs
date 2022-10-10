@@ -26,7 +26,7 @@ namespace VendorDeck.API.Controllers
 
         [HttpGet("{id}")]
         [ValidModelState]
-        [ServiceFilter(typeof(ValidId<Product>))]
+        [ServiceFilter(typeof(ValidId <Product>))]
         public async Task<IActionResult> GetProduct(int id)
         {
             var product = await productService.FindByIdAsync(id);

@@ -12,43 +12,42 @@ namespace VendorDeck.DataAccess.Concrete
 {
     public class GenericRepository<T> : IGenericRepository<T> where T :class 
     {
+        protected readonly VendorDeckContext _context;
+        private readonly DbSet<T> _dbSet;
+
+        public GenericRepository(VendorDeckContext context)
+        {
+            _context = context;
+            _dbSet = context.Set<T>();
+        }
         public async Task AddAsync(T entity)
         {
-            using var context = new VendorDeckContext();
-            await context.AddAsync(entity);
-            await context.SaveChangesAsync();
+            await _dbSet.AddAsync(entity);
         }
 
-        public async Task DeleteAsync(T entity)
+        public void Remove(T entity)
         {
-            using var context = new VendorDeckContext();
-            context.Remove(entity);
-            await context.SaveChangesAsync();
+            _dbSet.Remove(entity);
         }
 
         public async Task<T> FindByIdAsync(int id)
         {
-            using var context = new VendorDeckContext();
-            return await context.FindAsync<T>(id);
+            return await _dbSet.FindAsync(id);
         }
 
         public async Task<List<T>> GetAllAsync()
         {
-            using var context = new VendorDeckContext();
-            return await context.Set<T>().ToListAsync();
+            return await _dbSet.ToListAsync();
         }
 
         public async Task<List<T>> GetAsync(Expression<Func<T, bool>> filter)
         {
-            using var context = new VendorDeckContext();
-            return await context.Set<T>().Where(filter).ToListAsync();
+            return await _dbSet.Where(filter).ToListAsync();
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
-            using var context = new VendorDeckContext();
-            context.Update<T>(entity);
-            await context.SaveChangesAsync();
+            _dbSet.Update(entity);
         }
     }
 }

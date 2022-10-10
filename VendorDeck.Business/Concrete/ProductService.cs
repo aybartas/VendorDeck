@@ -11,7 +11,7 @@ namespace VendorDeck.Business.Concrete
 {
     public class ProductService : GenericService<Product>, IProductService
     {
-        public ProductService(IGenericRepository<Product> genericRepository) : base(genericRepository)
+        public ProductService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
     }

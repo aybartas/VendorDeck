@@ -12,8 +12,8 @@ namespace VendorDeck.DataAccess.Interfaces
         Task<List<T>> GetAllAsync();
         Task<List<T>> GetAsync(Expression<Func<T, bool>> filter);
         Task AddAsync(T entity);
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        void Update(T entity);
+        void Remove(T entity);
         Task<T> FindByIdAsync(int id);
     }
 }
