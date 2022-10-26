@@ -8,6 +8,7 @@ namespace VendorDeck.DataAccess.Mappings
     {
         public void Configure(EntityTypeBuilder<BasketItem> builder)
         {
+            builder.ToTable("BasketItems");
             builder.Property(I => I.Id).UseIdentityColumn();
             builder.Property(I => I.Quantity).IsRequired();
             builder.Property(I => I.ProductId).IsRequired();
