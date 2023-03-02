@@ -7,6 +7,7 @@ namespace VendorDeck.API.Controllers
     public class ErrorController : Controller
     {
         [Route("/error")]
+        [HttpGet]
         public IActionResult Error()
         {
             var errorInfo = HttpContext.Features.Get<IExceptionHandlerPathFeature>();

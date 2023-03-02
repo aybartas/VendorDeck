@@ -11,6 +11,7 @@ using System;
 using System.Text;
 using VendorDeck.API.ActionFilters;
 using VendorDeck.API.Config;
+using VendorDeck.API.Middlewares;
 using VendorDeck.Business.Containers;
 using VendorDeck.DataAccess.Context;
 using VendorDeck.Entities.Concrete;
@@ -83,6 +84,8 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             if (env.IsDevelopment())
             {

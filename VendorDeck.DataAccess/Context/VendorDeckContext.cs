@@ -10,9 +10,7 @@ namespace VendorDeck.DataAccess.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-              "server=TAS\\SQLEXPRESS; database=VendorDeckDb; integrated security=true;");
-
-            
+              "server=TUNATAS\\SQLEXPRESS; database=VendorDeckDb; integrated security=true;");
             base.OnConfiguring(optionsBuilder);
         }
 
