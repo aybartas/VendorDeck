@@ -1,16 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using VendorDeck.DataAccess.Mappings;
 using VendorDeck.Entities.Concrete;
 
 namespace VendorDeck.DataAccess.Context
 {
-    public class VendorDeckContext : IdentityDbContext<AppUser,AppRole,int>
+    public class VendorDeckContext : IdentityDbContext<AppUser, AppRole, int>
     {
+        public string ConnectionString { get; set; }
+        public VendorDeckContext(IConfiguration configuration)
+        {
+            ConnectionString = configuration["ConnectionString"];
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(
-              "server=TUNATAS\\SQLEXPRESS; database=VendorDeckDb; integrated security=true;");
+            optionsBuilder.UseSqlServer(ConnectionString);
+
             base.OnConfiguring(optionsBuilder);
         }
 

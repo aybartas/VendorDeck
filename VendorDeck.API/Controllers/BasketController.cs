@@ -92,9 +92,8 @@ namespace VendorDeck.API.Controllers
                 return NotFound();
             }
 
-            basketService.RemoveItemFromBasket(basket, productId, quantity);
+            await basketService.RemoveItemFromBasket(basket, productId, quantity);
             
-            // save
             return NoContent();
         }
     }

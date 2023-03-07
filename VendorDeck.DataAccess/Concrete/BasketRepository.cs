@@ -18,12 +18,10 @@ namespace VendorDeck.DataAccess.Concrete
 
         public async Task<Basket> GetBasketWithItemsAsync(string buyerId)
         {
-            using var context = new VendorDeckContext();
-            return await context.Baskets
-                .Include(I => I.BasketItems)
-                .ThenInclude(I => I.Product)
-                .Where(I => I.BuyerId == buyerId)
-                .FirstOrDefaultAsync();
+            return await _context.Baskets.
+                Include(b => b.BasketItems).
+                ThenInclude(bi => bi.Product).
+                SingleOrDefaultAsync(b => b.BuyerId == buyerId);
         }
     }
 }

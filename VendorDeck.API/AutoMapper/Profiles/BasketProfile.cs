@@ -14,6 +14,5 @@ namespace VendorDeck.API.AutoMapper.Profiles
                 ForMember(dest => dest.BasketItems, opt => opt.MapFrom(src => src.BasketItems))
                 .ReverseMap();
         }
-
     }
 }
