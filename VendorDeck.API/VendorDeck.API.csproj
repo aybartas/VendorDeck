@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VendorDeck.API.Models\VendorDeck.API.Models.csproj" />
     <ProjectReference Include="..\VendorDeck.Business\VendorDeck.Business.csproj" />
   </ItemGroup>
 

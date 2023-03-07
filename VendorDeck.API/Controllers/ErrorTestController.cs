@@ -29,8 +29,8 @@ namespace VendorDeck.API.Controllers
         public ActionResult GetValidationError()
         {
             ModelState.AddModelError("Problem1", "this is first error");
-            ModelState.AddModelError("Problem1", "this is first error");
-            ModelState.AddModelError("Problem1", "this is first error");
+            ModelState.AddModelError("Problem2", "this is second error");
+            ModelState.AddModelError("Problem3", "this is third error");
             return ValidationProblem();
         }
 

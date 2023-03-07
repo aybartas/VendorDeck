@@ -1,4 +1,4 @@
-﻿namespace VendorDeck.Entities.Dtos
+﻿namespace VendorDeck.API.Models
 {
     public class BasketItemDto
     {

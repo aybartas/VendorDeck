@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using VendorDeck.Entities.Concrete;
-using VendorDeck.Entities.Dtos;
+using VendorDeck.API.Models;
 
 namespace VendorDeck.API.AutoMapper.Profiles
 {

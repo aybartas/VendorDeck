@@ -2,12 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
+using VendorDeck.API.Models;
 using VendorDeck.Business.Interfaces;
-using VendorDeck.DataAccess.Interfaces;
 using VendorDeck.Entities.Concrete;
-using VendorDeck.Entities.Dtos;
 
 namespace VendorDeck.API.Controllers
 {

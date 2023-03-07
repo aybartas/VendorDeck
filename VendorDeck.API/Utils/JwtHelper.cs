@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using VendorDeck.API.Config;
-using VendorDeck.Entities.Dtos;
+using VendorDeck.API.Models;
 
 namespace VendorDeck.API.Utils
 {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using VendorDeck.Entities.Concrete;
-using VendorDeck.Entities.Dtos;
+using VendorDeck.API.Models;
 
 namespace VendorDeck.API.Controllers
 {
