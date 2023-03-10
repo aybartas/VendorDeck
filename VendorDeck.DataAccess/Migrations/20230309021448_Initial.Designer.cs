@@ -12,7 +12,7 @@ using VendorDeck.DataAccess.Context;
 namespace VendorDeck.DataAccess.Migrations
 {
     [DbContext(typeof(VendorDeckContext))]
-    [Migration("20230129223633_Initial")]
+    [Migration("20230309021448_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
