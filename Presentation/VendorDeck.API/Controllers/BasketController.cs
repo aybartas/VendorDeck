@@ -1,9 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using VendorDeck.Application.Dtos;
 using VendorDeck.Application.Services;
+using VendorDeck.Domain.Entities.Concrete;
 
 namespace VendorDeck.API.Controllers
 {
@@ -13,86 +14,89 @@ namespace VendorDeck.API.Controllers
     {
         private readonly IBasketService basketService;
         private readonly IProductService productService;
-        private readonly IMapper mapper;
 
-        public BasketController(IBasketService basketService, IProductService productService, IMapper mapper)
+        public BasketController(IBasketService basketService, IProductService productService)
         {
             this.basketService = basketService;
             this.productService = productService;
-            this.mapper = mapper;
         }
 
         [HttpGet(Name = "GetBasket")]
         public async Task<IActionResult> GetBasket()
         {
-            var buyerId = Request.Cookies["buyerId"];
+            return null;
+            //var buyerId = Request.Cookies["buyerId"];
 
-            var basket = await basketService.GetBasketWithBasketItems(buyerId);
+            //var basket = await basketService.GetBasketWithBasketItems(buyerId);
 
-            if (basket == null || buyerId == null)
-            {
-                return NotFound();
-            }
+            //if (basket == null || buyerId == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var basketDto = mapper.Map<BasketDto>(basket);
+            //var basketDto = mapper.Map<BasketDto>(basket);
 
-            return Ok(basketDto);
+            //return Ok(basketDto);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddBasket( [FromBody]AddBasketDto basketItem)
         {
-            var product = await productService.FindByIdAsync(basketItem.ProductId);
+            return null;
 
-            if (product == null) 
-                return NotFound();
+            //var product = await productService.FindByIdAsync(basketItem.ProductId);
 
-            var buyerId = Request.Cookies["buyerId"];
-            var basket = await basketService.GetBasketWithBasketItems(buyerId);
+            //if (product == null) 
+            //    return NotFound();
+
+            //var buyerId = Request.Cookies["buyerId"];
+            //var basket = await basketService.GetBasketWithBasketItems(buyerId);
             
-            if(basket != null)
-            {
-                basketService.AddItemToBasket(basket, product, basketItem.Quantity);
-                return Created("", mapper.Map<BasketDto>(basket));
-            }
+            //if(basket != null)
+            //{
+            //    basketService.AddItemToBasket(basket, product, basketItem.Quantity);
+            //    return Created("", mapper.Map<BasketDto>(basket));
+            //}
             
-            buyerId = Guid.NewGuid().ToString();
-            var cookieOptions = new CookieOptions {
-                IsEssential = true,
-                Expires = DateTime.Now.AddDays(30),
-            };
+            //buyerId = Guid.NewGuid().ToString();
+            //var cookieOptions = new CookieOptions {
+            //    IsEssential = true,
+            //    Expires = DateTime.Now.AddDays(30),
+            //};
 
-            Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+            //Response.Cookies.Append("buyerId", buyerId, cookieOptions);
 
-            // create new basket 
+            //// create new basket 
 
-            var newBasket = new Basket
-            {
-                BuyerId = buyerId,
-                BasketItems = { new BasketItem { Quantity = basketItem.Quantity, ProductId = basketItem.ProductId} }
-            };
+            //var newBasket = new Basket
+            //{
+            //    BuyerId = buyerId,
+            //    BasketItems = { new BasketItem { Quantity = basketItem.Quantity, ProductId = basketItem.ProductId} }
+            //};
 
-            await basketService.AddAsync(newBasket);
+            //await basketService.AddAsync(newBasket);
 
-            return CreatedAtRoute("GetBasket", mapper.Map<BasketDto>(newBasket));
+            //return CreatedAtRoute("GetBasket", mapper.Map<BasketDto>(newBasket));
         }
 
         [HttpDelete]
         public async Task<IActionResult> RemoveBasketItem(int productId, int quantity)
         {
-            // get basket
-            var buyerId = Request.Cookies["buyerId"];
+            return null;
 
-            var basket = await basketService.GetBasketWithBasketItems(buyerId);
+            //// get basket
+            //var buyerId = Request.Cookies["buyerId"];
 
-            if (basket == null || buyerId == null)
-            {
-                return NotFound();
-            }
+            //var basket = await basketService.GetBasketWithBasketItems(buyerId);
 
-            await basketService.RemoveItemFromBasket(basket, productId, quantity);
+            //if (basket == null || buyerId == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //await basketService.RemoveItemFromBasket(basket, productId, quantity);
             
-            return NoContent();
+            //return NoContent();
         }
     }
 }

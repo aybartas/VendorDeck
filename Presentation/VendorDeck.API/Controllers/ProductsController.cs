@@ -20,16 +20,20 @@ namespace VendorDeck.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var productEntities = await productService.GetAllAsync();
-            return Ok(productEntities);
+            return null;
+
+            //var productEntities = await productService.GetAllAsync();
+            //return Ok(productEntities);
         }
 
         [HttpGet("{id}")]
         [ValidModelState]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await productService.FindByIdAsync(id);
-            return Ok(product);
+            return null;
+
+            //var product = await productService.FindByIdAsync(id);
+            //return Ok(product);
 
         }
 

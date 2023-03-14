@@ -6,7 +6,6 @@ namespace VendorDeck.Persistence.Context
 {
     public class VendorDeckContext : DbContext
     {
-   
         public VendorDeckContext(DbContextOptions options) : base(options)
         {
         }
