@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VendorDeck.Domain.Entities.Interfaces;
 
-namespace VendorDeck.Domain.Entities.Concrete
+namespace VendorDeck.Application.Dtos
 {
-    public class Product : BaseEntity, ITable
+    public class AddProductDto
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -16,6 +15,5 @@ namespace VendorDeck.Domain.Entities.Concrete
         public string Type { get; set; }
         public string Brand { get; set; }
         public int Stock { get; set; }
-
     }
 }

@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using VendorDeck.Application.Dtos;
-using VendorDeck.Application.Services;
+using VendorDeck.Application.Features.Commands.Basket.AddItemToBasket;
+using VendorDeck.Application.Features.Commands.Basket.CreateBasket;
+using VendorDeck.Application.Features.Commands.Basket.RemoveItemFromBasket;
+using VendorDeck.Application.Features.Queries.Basket.GetBasket;
+using VendorDeck.Application.Features.Queries.Product.GetProduct;
 using VendorDeck.Domain.Entities.Concrete;
 
 namespace VendorDeck.API.Controllers
@@ -12,91 +17,95 @@ namespace VendorDeck.API.Controllers
     [ApiController]
     public class BasketController : ControllerBase
     {
-        private readonly IBasketService basketService;
-        private readonly IProductService productService;
-
-        public BasketController(IBasketService basketService, IProductService productService)
+        private readonly IMediator _mediator;
+        public BasketController(IMediator mediator)
         {
-            this.basketService = basketService;
-            this.productService = productService;
+            _mediator = mediator;
         }
+
 
         [HttpGet(Name = "GetBasket")]
         public async Task<IActionResult> GetBasket()
         {
-            return null;
-            //var buyerId = Request.Cookies["buyerId"];
+            var buyerId = Request.Cookies["buyerId"];
 
-            //var basket = await basketService.GetBasketWithBasketItems(buyerId);
+            if (string.IsNullOrEmpty(buyerId)) return NotFound();
 
-            //if (basket == null || buyerId == null)
-            //{
-            //    return NotFound();
-            //}
+            var getBasketRequest = new GetBasketQueryRequest { BuyerId = buyerId };
 
-            //var basketDto = mapper.Map<BasketDto>(basket);
+            var basket = await _mediator.Send(getBasketRequest);
 
-            //return Ok(basketDto);
+            return basket is null ? NotFound() : Ok(basket);
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBasket( [FromBody]AddBasketDto basketItem)
+        public async Task<IActionResult> AddToBasket( [FromBody]AddBasketDto basketItem)
         {
-            return null;
+            var getProductRequest = new GetProductQueryRequest { ProductId = basketItem.ProductId };
+            var productResponse = await _mediator.Send(getProductRequest);
 
-            //var product = await productService.FindByIdAsync(basketItem.ProductId);
+            if (productResponse.Product == null)
+                return NotFound();
 
-            //if (product == null) 
-            //    return NotFound();
+            var buyerId = Request.Cookies["buyerId"];
+            var getBasketQueryRequest = new GetBasketQueryRequest { BuyerId =  buyerId };
 
-            //var buyerId = Request.Cookies["buyerId"];
-            //var basket = await basketService.GetBasketWithBasketItems(buyerId);
-            
-            //if(basket != null)
-            //{
-            //    basketService.AddItemToBasket(basket, product, basketItem.Quantity);
-            //    return Created("", mapper.Map<BasketDto>(basket));
-            //}
-            
-            //buyerId = Guid.NewGuid().ToString();
-            //var cookieOptions = new CookieOptions {
-            //    IsEssential = true,
-            //    Expires = DateTime.Now.AddDays(30),
-            //};
+            var basketResponse = await _mediator.Send(getBasketQueryRequest);
 
-            //Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+            if (basketResponse?.Basket != null)
+            {
+                var addItemToBasketRequest =  new AddItemToBasketCommandRequest { Basket= basketResponse.Basket ,Product = productResponse.Product, Quantity = basketItem.Quantity };
+                var addToBasketResponse = await _mediator.Send(addItemToBasketRequest);
 
-            //// create new basket 
+                return Created("", addToBasketResponse.Basket);
+            }
 
-            //var newBasket = new Basket
-            //{
-            //    BuyerId = buyerId,
-            //    BasketItems = { new BasketItem { Quantity = basketItem.Quantity, ProductId = basketItem.ProductId} }
-            //};
+            buyerId = Guid.NewGuid().ToString();
+            var cookieOptions = new CookieOptions
+            {
+                IsEssential = true,
+                Expires = DateTime.Now.AddDays(30),
+            };
 
-            //await basketService.AddAsync(newBasket);
+            Response.Cookies.Append("buyerId", buyerId, cookieOptions);
 
-            //return CreatedAtRoute("GetBasket", mapper.Map<BasketDto>(newBasket));
+            // create new basket 
+            var newBasket = new Basket
+            {
+                BuyerId = buyerId,
+                BasketItems = { new BasketItem { Quantity = basketItem.Quantity, ProductId = basketItem.ProductId } }
+            };
+
+            var createbasketRequest = new CreateBasketCommandRequest { Basket= newBasket };
+            var addBasketResult = await _mediator.Send(createbasketRequest);
+
+            return addBasketResult.Success ? CreatedAtRoute("GetBasket", newBasket) : BadRequest("Error creating basket");
         }
 
         [HttpDelete]
         public async Task<IActionResult> RemoveBasketItem(int productId, int quantity)
         {
-            return null;
 
-            //// get basket
-            //var buyerId = Request.Cookies["buyerId"];
+            var buyerId = Request.Cookies["buyerId"];
 
-            //var basket = await basketService.GetBasketWithBasketItems(buyerId);
+            if(string.IsNullOrEmpty(buyerId))
+                return BadRequest("Buyer Not Found");
 
-            //if (basket == null || buyerId == null)
-            //{
-            //    return NotFound();
-            //}
+            var getBasketQueryRequest = new GetBasketQueryRequest { BuyerId = buyerId };
 
-            //await basketService.RemoveItemFromBasket(basket, productId, quantity);
-            
-            //return NoContent();
+            var basketResponse = await _mediator.Send(getBasketQueryRequest);
+
+            if (basketResponse.Basket == null)
+            {
+                return NotFound("Basket not found");
+            }
+
+            var removeItemFromBasketRequest = new RemoveItemFromBasketRequest { Basket = basketResponse.Basket, ProductId = productId, Quantity = quantity };
+
+            await _mediator.Send(removeItemFromBasketRequest);
+
+            return NoContent();
         }
     }
 }

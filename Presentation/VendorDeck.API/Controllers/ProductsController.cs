@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 using VendorDeck.API.ActionFilters;
-using VendorDeck.Application.Services;
-using VendorDeck.Domain.Entities.Concrete;
+using VendorDeck.Application.Features.Queries.Product.GetAllProduct;
+using VendorDeck.Application.Features.Queries.Product.GetProduct;
+using VendorDeck.Application.Repositories;
+using VendorDeck.Application.RequestParameters;
+using VendorDeck.Application.Responses;
 
 namespace VendorDeck.API.Controllers
 {
@@ -11,31 +15,27 @@ namespace VendorDeck.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductService productService;
-        public ProductsController(IProductService productService)
+        private readonly IMediator _mediator;
+        public ProductsController(IMediator mediator)
         {
-            this.productService = productService;   
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]GetAllProductQueryRequest getAllProductQueryRequest)
         {
-            return null;
+            var response = await _mediator.Send(getAllProductQueryRequest);
 
-            //var productEntities = await productService.GetAllAsync();
-            //return Ok(productEntities);
+            return Ok(response); 
         }
 
         [HttpGet("{id}")]
         [ValidModelState]
         public async Task<IActionResult> GetProduct(int id)
         {
-            return null;
-
-            //var product = await productService.FindByIdAsync(id);
-            //return Ok(product);
-
+            var getProductRequest = new GetProductQueryRequest { ProductId= id };
+            var product = await _mediator.Send(getProductRequest);
+            return product is null ? NotFound("Product not found") : Ok(product);
         }
-
     }
 }

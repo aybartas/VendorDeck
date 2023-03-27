@@ -7,9 +7,8 @@ using VendorDeck.Domain.Entities.Interfaces;
 
 namespace VendorDeck.Domain.Entities.Concrete
 {
-    public class Basket : ITable
+    public class Basket : BaseEntity, ITable
     {
-        public int Id { get; set; }
         public string BuyerId { get; set; }
         public List<BasketItem> BasketItems { get; set; } = new();
 

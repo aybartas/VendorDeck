@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VendorDeck.Application.Services;
 using VendorDeck.Domain.Entities.Concrete;
 
-namespace VendorDeck.Persistence.Concretes
+namespace VendorDeck.Application.Repositories
 {
-    public class BasketService :  IBasketService
+    public interface IProductReadRepository : IReadRepository<Product>
     {
-
     }
 }

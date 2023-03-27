@@ -1,10 +1,10 @@
 ﻿using System.Text.Json.Serialization;
+using VendorDeck.Domain.Entities.Interfaces;
 
 namespace VendorDeck.Domain.Entities.Concrete
 {
-    public class BasketItem
+    public class BasketItem : BaseEntity , ITable
     {
-        public int Id { get; set; }
         public int Quantity { get; set; }
 
         // navigation properties

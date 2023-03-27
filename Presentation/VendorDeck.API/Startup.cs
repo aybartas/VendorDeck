@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,9 +9,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Linq;
 using System.Text;
 using VendorDeck.API.ActionFilters;
 using VendorDeck.API.Middlewares;
+using VendorDeck.Application;
+using VendorDeck.Application.Validators;
+using VendorDeck.Domain.Entities.Concrete;
 using VendorDeck.Persistence.IOC;
 
 namespace VendorDeck.API
@@ -26,12 +32,15 @@ namespace VendorDeck.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(config =>
+            config.RegisterValidatorsFromAssemblyContaining<AddProductValidator>());
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
             });
             services.AddPersistenceServices(Configuration);
+            services.AddApplicationServices();
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
             //{
             //    opt.TokenValidationParameters = new TokenValidationParameters()
@@ -51,11 +60,15 @@ namespace VendorDeck.API
             });
             services.AddCors();
             //services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            string[] allowedOrigins = Configuration.GetSection("AllowedOrigins").Get<string[]>();
 
             app.UseMiddleware<ExceptionMiddleware>();
 
@@ -75,7 +88,7 @@ namespace VendorDeck.API
                 option.AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .WithOrigins("http://localhost:3000", "https://localhost:3000");
+                .WithOrigins(allowedOrigins);
             });
 
             app.UseAuthentication();
