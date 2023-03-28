@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using VendorDeck.DataAccess.Mappings;
 using VendorDeck.Domain.Entities.Concrete;
 
 namespace VendorDeck.Persistence.Context
 {
-    public class VendorDeckContext : DbContext
+    public class VendorDeckContext : IdentityDbContext<AppUser,AppRole,int>
     {
         public VendorDeckContext(DbContextOptions options) : base(options)
         {
