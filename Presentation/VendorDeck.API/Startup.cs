@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +17,7 @@ using VendorDeck.API.Middlewares;
 using VendorDeck.Application;
 using VendorDeck.Application.Validators;
 using VendorDeck.Domain.Entities.Concrete;
+using VendorDeck.Infrastructure;
 using VendorDeck.Persistence.IOC;
 
 namespace VendorDeck.API
@@ -41,18 +43,23 @@ namespace VendorDeck.API
             });
             services.AddPersistenceServices(Configuration);
             services.AddApplicationServices();
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
-            //{
-            //    opt.TokenValidationParameters = new TokenValidationParameters()
-            //    {
-            //        ValidIssuer = Configuration["JwtConfig:ValidIssuer"],
-            //        ValidAudience = Configuration["JwtConfig:ValidAudience"],
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtConfig:SecretKey"])),
-            //        ValidateIssuerSigningKey = true,
-            //        ValidateLifetime = true,
-            //        ClockSkew = TimeSpan.Zero
-            //    };
-            //});
+            services.AddInfrastructureServices();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+            {
+                opt.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["JwtConfig:ValidIssuer"],
+                    ValidAudience = Configuration["JwtConfig:ValidAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtConfig:SecretKey"])),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+            services.AddAuthorization();
             services.ConfigureApplicationCookie(opt =>
             {
                 //opt.AccessDeniedPath = "/Account/Login";
