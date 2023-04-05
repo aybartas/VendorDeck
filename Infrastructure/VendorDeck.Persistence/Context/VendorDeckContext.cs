@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using VendorDeck.DataAccess.Mappings;
 using VendorDeck.Domain.Entities.Concrete;
+using VendorDeck.Persistence.Mappings;
 
 namespace VendorDeck.Persistence.Context
 {
-    public class VendorDeckContext : IdentityDbContext<AppUser,AppRole,int>
+    public class VendorDeckContext : IdentityDbContext<AppUser, AppRole, int>
     {
         public VendorDeckContext(DbContextOptions options) : base(options)
         {
@@ -16,6 +17,8 @@ namespace VendorDeck.Persistence.Context
             modelBuilder.ApplyConfiguration(new ProductMap());
             modelBuilder.ApplyConfiguration(new BasketMap());
             modelBuilder.ApplyConfiguration(new BasketItemMap());
+            modelBuilder.ApplyConfiguration(new AppRoleMap());
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -31,7 +34,7 @@ namespace VendorDeck.Persistence.Context
                         entity.Entity.LastModifiedDate = DateTime.UtcNow;
                         break;
                     case EntityState.Added:
-                        entity.Entity.CreatedDate= DateTime.UtcNow;
+                        entity.Entity.CreatedDate = DateTime.UtcNow;
                         break;
                     default:
                         break;

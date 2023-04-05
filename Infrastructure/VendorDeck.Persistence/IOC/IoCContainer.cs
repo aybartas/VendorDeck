@@ -16,7 +16,18 @@ namespace VendorDeck.Persistence.IOC
         {
             var connectionString = configuration["ConnectionString"];
             services.AddDbContext<VendorDeckContext>(opt => opt.UseSqlServer(connectionString));
-            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<VendorDeckContext>();
+            services.AddIdentity<AppUser, AppRole>(
+                opt => {
+                    opt.Password.RequiredLength = 3;
+                    opt.Password.RequireNonAlphanumeric = false;
+                    opt.Password.RequireDigit = false;
+                    opt.Password.RequireLowercase = false;
+                    opt.Password.RequireUppercase = false;
+
+
+
+                }
+            ).AddEntityFrameworkStores<VendorDeckContext>();
             services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
             services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
 
