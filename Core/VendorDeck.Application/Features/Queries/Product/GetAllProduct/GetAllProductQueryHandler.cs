@@ -22,12 +22,14 @@ namespace VendorDeck.Application.Features.Queries.Product.GetAllProduct
         public async Task<GetAllProductQueryResponse> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
         {
             var totalCount = productReadRepository.GetAll().Count();
-            var products = productReadRepository.GetAll(false)
-            .Skip(request.Size * request.Page).Take(request.Size).ToList();
+
+            var query = productReadRepository.GetAll(false);
+            query = request.ApplyPagination(query);
+            query = request.ApplySorting(query);
 
             return new GetAllProductQueryResponse
             {
-                Items= products,
+                Items= query.ToList(),
                 TotalCount = totalCount
             };
         }
