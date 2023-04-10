@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\VendorDeck.Application\VendorDeck.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\VendorDeck.Infrastructure\VendorDeck.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\VendorDeck.Persistence\VendorDeck.Persistence.csproj" />
   </ItemGroup>
 

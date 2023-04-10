@@ -14,9 +14,8 @@ namespace VendorDeck.Infrastructure
 {
     public static class ServiceRegistration
     {
-        public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddInfrastructureServices(this IServiceCollection services )
         {
-
             services.AddScoped<ITokenHandler, TokenHandler>();
         }
     }
