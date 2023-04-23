@@ -24,8 +24,10 @@ namespace VendorDeck.Application.Features.Queries.Product.GetAllProduct
             var totalCount = productReadRepository.GetAll().Count();
 
             var query = productReadRepository.GetAll(false);
+
             query = request.ApplyPagination(query);
             query = request.ApplySorting(query);
+            query = request.ApplySearch(query);
 
             return new GetAllProductQueryResponse
             {

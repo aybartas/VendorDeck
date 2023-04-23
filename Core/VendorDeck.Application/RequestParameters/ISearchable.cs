@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace VendorDeck.Application.RequestParameters
 {
-    public interface ISortable<T>
+    public interface ISearchable<T>
     {
-        public bool Ascending { get; set; }
-        public string SortBy { get; set; }
-        public IQueryable<T> ApplySorting(IQueryable<T> query);
+        public string SearchText { get; set; }
+        public IQueryable<T> ApplySearch(IQueryable<T> query);
     }
 }
