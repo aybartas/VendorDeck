@@ -10,6 +10,7 @@ namespace VendorDeck.Application.DataFilters
     {
         public string Key { get; set; }
         public string Value { get; set; }
+        public List<string> Values { get; set; }
         public string Operation { get; set; }
     }
 }

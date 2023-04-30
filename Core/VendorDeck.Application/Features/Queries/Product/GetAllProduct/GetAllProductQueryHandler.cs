@@ -27,11 +27,12 @@ namespace VendorDeck.Application.Features.Queries.Product.GetAllProduct
 
             query = request.ApplyPagination(query);
             query = request.ApplySorting(query);
-            query = request.ApplySearch(query);
+            query = request.ApplyFiltering(query);
 
             return new GetAllProductQueryResponse
+
             {
-                Items= query.ToList(),
+                Items= query?.ToList(),
                 TotalCount = totalCount
             };
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VendorDeck.Application.RequestParameters
 {
-    public interface IPagination<T>
+    public interface IPageable<T>
     {
         public int Page { get; set; }
         public int Size { get; set; }
