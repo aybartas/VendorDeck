@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\VendorDeck.Application\VendorDeck.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\VendorDeck.Infrastructure\VendorDeck.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\VendorDeck.Persistence\VendorDeck.Persistence.csproj" />
   </ItemGroup>
 
