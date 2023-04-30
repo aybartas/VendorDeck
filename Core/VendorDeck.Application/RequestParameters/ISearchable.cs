@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace VendorDeck.Application.RequestParameters
 {
-    public class Pagination
+    public interface ISearchable<T>
     {
-        public int Page { get; set; } = 0;
-        public int Size { get; set; } = 10;
+        public string SearchText { get; set; }
+        public IQueryable<T> ApplySearch(IQueryable<T> query);
     }
 }

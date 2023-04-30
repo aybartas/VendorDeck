@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using VendorDeck.API.ActionFilters;
 using VendorDeck.Application.Features.Queries.Product.GetAllProduct;
 using VendorDeck.Application.Features.Queries.Product.GetProduct;
+using VendorDeck.Application.Features.Queries.Product.GetProductFilterValues;
 using VendorDeck.Application.Repositories;
 using VendorDeck.Application.RequestParameters;
 using VendorDeck.Application.Responses;
@@ -39,6 +40,14 @@ namespace VendorDeck.API.Controllers
             var getProductRequest = new GetProductQueryRequest { ProductId= id };
             var product = await _mediator.Send(getProductRequest);
             return product is null ? NotFound("Product not found") : Ok(product);
+        }
+        [HttpGet("filters")]
+        [ValidModelState]
+        public async Task<IActionResult> GetProductFilters(int id)
+        {
+            var getFilterValuesRequest = new GetProductsFilterValuesRequest();
+            var filterValues = await _mediator.Send(getFilterValuesRequest);
+            return Ok(filterValues);
         }
     }
 }
