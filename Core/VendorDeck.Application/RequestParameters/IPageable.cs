@@ -9,8 +9,8 @@ namespace VendorDeck.Application.RequestParameters
 {
     public interface IPageable<T>
     {
-        public int Page { get; set; }
-        public int Size { get; set; }
+        public int? Page { get; set; }
+        public int? Size { get; set; }
 
         public IQueryable<T> ApplyPagination(IQueryable<T> query);
     }
