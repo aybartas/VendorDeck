@@ -7,9 +7,9 @@ namespace VendorDeck.Application.Features.Queries.Product.GetAllProduct
 {
     public class GetAllProductQueryRequest : IProductParams, IPageable<ProductEntity>,ISortable<ProductEntity>, IRequest<GetAllProductQueryResponse>
     {
-        public int Page { get; set; } = 0;
-        public int Size { get; set; } = 6;
-        public bool Ascending { get; set; } = true;
+        public int? Page { get; set; } = 0;
+        public int? Size { get; set; } = 6;
+        public bool? Ascending { get; set; } = true;
         public string? SortBy { get; set; }
         public string? SearchText { get; set; }
         public string? Brands { get; set; }
@@ -19,7 +19,7 @@ namespace VendorDeck.Application.Features.Queries.Product.GetAllProduct
 
         public IQueryable<ProductEntity> ApplyPagination(IQueryable<ProductEntity> query)
         {
-            return query.Skip(Size * Page).Take(Size);
+            return query.Skip(Size.Value * Page.Value).Take(Size.Value);
         }
         public IQueryable<ProductEntity> ApplySorting(IQueryable<ProductEntity> query)
         {
@@ -27,8 +27,9 @@ namespace VendorDeck.Application.Features.Queries.Product.GetAllProduct
 
             return SortBy switch
             {
-                "price" => Ascending ? query.OrderBy(I => I.Price) : query.OrderByDescending(I => I.Price),
-                "name" => Ascending ? query.OrderBy(I => I.Name) : query.OrderByDescending(I => I.Name),
+                "price" => Ascending.Value
+                ? query.OrderBy(I => I.Price) : query.OrderByDescending(I => I.Price),
+                "name" => Ascending.Value ? query.OrderBy(I => I.Name) : query.OrderByDescending(I => I.Name),
                 _ => query,
             };
         }
