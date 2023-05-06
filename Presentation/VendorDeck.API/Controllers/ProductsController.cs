@@ -15,7 +15,7 @@ namespace VendorDeck.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
 
     public class ProductsController : ControllerBase
     {
@@ -26,15 +26,14 @@ namespace VendorDeck.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery]GetAllProductQueryRequest getAllProductQueryRequest)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllProductQueryRequest getAllProductQueryRequest)
         {
             var response = await _mediator.Send(getAllProductQueryRequest);
 
-            return Ok(response); 
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
-        [ValidModelState]
         public async Task<IActionResult> GetProduct(int id)
         {
             var getProductRequest = new GetProductQueryRequest { ProductId= id };
@@ -42,8 +41,7 @@ namespace VendorDeck.API.Controllers
             return product is null ? NotFound("Product not found") : Ok(product);
         }
         [HttpGet("filters")]
-        [ValidModelState]
-        public async Task<IActionResult> GetProductFilters(int id)
+        public async Task<IActionResult> GetProductFilters()
         {
             var getFilterValuesRequest = new GetProductsFilterValuesRequest();
             var filterValues = await _mediator.Send(getFilterValuesRequest);

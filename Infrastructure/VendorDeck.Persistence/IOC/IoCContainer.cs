@@ -24,8 +24,6 @@ namespace VendorDeck.Persistence.IOC
                     opt.Password.RequireLowercase = false;
                     opt.Password.RequireUppercase = false;
 
-
-
                 }
             ).AddEntityFrameworkStores<VendorDeckContext>();
             services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
