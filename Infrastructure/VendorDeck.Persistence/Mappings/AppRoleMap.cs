@@ -14,8 +14,8 @@ namespace VendorDeck.Persistence.Mappings
         public void Configure(EntityTypeBuilder<AppRole> builder)
         {
             builder.HasData(
-                new AppRole { Name = "Member", NormalizedName = "MEMBER" },
-                new AppRole { Name = "Admin", NormalizedName = "ADMIN" });
+                new AppRole { Id = 1,Name = "Member", NormalizedName = "MEMBER" },
+                new AppRole { Id = 2,Name = "Admin", NormalizedName = "ADMIN" });
         }
     }
 }
