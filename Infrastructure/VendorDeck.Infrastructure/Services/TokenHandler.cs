@@ -1,15 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Cryptography;
+using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using VendorDeck.Application.Dtos;
 using VendorDeck.Application.Token;
+using VendorDeck.Domain.Entities.Concrete;
 
 namespace VendorDeck.Infrastructure.Services
 {
@@ -17,28 +14,46 @@ namespace VendorDeck.Infrastructure.Services
     public class TokenHandler : ITokenHandler
     {
         private readonly IConfiguration configuration;
-        public TokenHandler(IConfiguration configuration)
+        private readonly UserManager<AppUser> userManager;
+
+        public TokenHandler(IConfiguration configuration, UserManager<AppUser> userManager)
         {
             this.configuration = configuration;
+            this.userManager = userManager;
         }
-        public TokenDto CreateAccessToken(int lifeTimeDays)
+        public async Task<TokenDto> CreateAccessToken(AppUser user, double? lifeTimeDays = 5)
         {
             var token = new TokenDto();
+            var expireDate = DateTime.UtcNow.AddDays(lifeTimeDays.Value);
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtConfig:SecretKey"]));
             var signInCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            token.ExpireDate = DateTime.UtcNow.AddDays(lifeTimeDays);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email,user.Email),
+                new Claim(ClaimTypes.Name, user.UserName)
+            };
+
+            var roles = await userManager.GetRolesAsync(user);
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var securityToken = new JwtSecurityToken(
                 issuer: configuration["JwtConfig:ValidIssuer"].ToString(),
-                expires:token.ExpireDate,
-                notBefore:DateTime.UtcNow,
-                signingCredentials:signInCredentials
+                expires: expireDate,
+                claims: claims,
+                notBefore: DateTime.UtcNow,
+                signingCredentials: signInCredentials
                 );
 
             var handler = new JwtSecurityTokenHandler();
-            var jwtToken =  handler.WriteToken(securityToken);
+            var jwtToken = handler.WriteToken(securityToken);
 
+            token.ExpireDate = expireDate;
             token.AccessToken = jwtToken;
             return token;
 

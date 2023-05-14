@@ -153,6 +153,22 @@ namespace VendorDeck.Persistence.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConcurrencyStamp = "a84b2463-b408-4d14-8a67-fe8e35879c43",
+                            Name = "Member",
+                            NormalizedName = "MEMBER"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ConcurrencyStamp = "24813d04-5f8a-438c-8a7a-abeac3df4162",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("VendorDeck.Domain.Entities.Concrete.AppUser", b =>
