@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using VendorDeck.Application.Dtos;
 using VendorDeck.Application.Exceptions;
 using VendorDeck.Application.Token;
 using User = VendorDeck.Domain.Entities.Concrete.AppUser;
@@ -34,9 +35,9 @@ namespace VendorDeck.Application.Features.Commands.AppUser.Login
             if (!signInResult.Succeeded)
                 throw new LoginErrorException();
 
-            var token = _tokenHandler.CreateAccessToken(5);
+            TokenDto token = await _tokenHandler.CreateAccessToken(appUser, 5); ;
 
-            return new LoginCommandResponse { Token= token };
+            return new LoginCommandResponse { Token= token, Username = appUser.UserName };
         }
-    }
+    } 
 }

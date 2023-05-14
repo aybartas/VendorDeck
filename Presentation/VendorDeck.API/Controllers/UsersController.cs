@@ -1,10 +1,14 @@
-﻿using MediatR;
+﻿using Azure.Core;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Threading.Tasks;
 using VendorDeck.Application.Features.Commands.AppUser.Login;
 using VendorDeck.Application.Features.Commands.AppUser.Register;
+using VendorDeck.Application.Features.Queries.User.GetCurrentUser;
 using VendorDeck.Application.Token;
 
 namespace VendorDeck.API.Controllers
@@ -20,17 +24,35 @@ namespace VendorDeck.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        public async Task <IActionResult> CreateUser(CreateUserCommandRequest request)
+        [HttpPost("register")]
+        public async Task <IActionResult> Register(CreateUserCommandRequest request)
         {
             var response = await _mediator.Send(request);
 
             return Ok(response);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(LoginCommandRequest request)
         {
+            try
+            {
+                var response = await _mediator.Send(request);
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return Unauthorized();
+            }
+        }
+
+        [Authorize]
+        [HttpGet("currentUser")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var userName = User.Identity.Name;
+            var request =new GetCurrentUserQueryRequest { Username = userName };
             var response = await _mediator.Send(request);
 
             return Ok(response);
