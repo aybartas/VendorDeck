@@ -13,7 +13,7 @@ namespace VendorDeck.Application.Features.Queries.Product.GetProductFilterValues
             _productReadRepository = productReadRepository;
         }
 
-        public async Task<GetProductsFilterValuesResponse> Handle(GetProductsFilterValuesRequest request, CancellationToken cancellationToken)
+        public async Task<GetProductsFilterValuesResponse> Handle(GetProductsFilterValuesRequest request, CancellationToken cancellationToken = default)
         {
             var products = await _productReadRepository.GetAll(useTracking: false).ToListAsync();
 

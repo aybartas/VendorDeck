@@ -45,17 +45,22 @@ namespace VendorDeck.API
             services.AddApplicationServices();
             services.AddInfrastructureServices();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+            services.AddAuthentication(options =>
             {
-                opt.TokenValidationParameters = new TokenValidationParameters()
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false; 
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true,
-                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["JwtConfig:ValidIssuer"],
-                    ValidAudience = Configuration["JwtConfig:ValidAudience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtConfig:SecretKey"])),
-                    ClockSkew = TimeSpan.Zero
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration["JwtConfig:ValidIssuer"],
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JwtConfig:ValidAudience"],
                 };
             });
 
@@ -86,7 +91,6 @@ namespace VendorDeck.API
             app.UseExceptionHandler("/Error");
             //app.UseHttpsRedirection();
 
-            app.UseRouting();
 
             app.UseCors(option =>
             {
@@ -97,7 +101,7 @@ namespace VendorDeck.API
             });
 
             app.UseAuthentication();
-
+            app.UseRouting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -17,7 +17,7 @@ namespace VendorDeck.Application.Features.Commands.AppUser
             _userManager = userManager;
         }
 
-        public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
+        public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken = default)
         {
             //TODO map with automapper 
 

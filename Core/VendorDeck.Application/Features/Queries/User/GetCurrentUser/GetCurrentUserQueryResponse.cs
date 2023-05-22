@@ -9,6 +9,8 @@ namespace VendorDeck.Application.Features.Queries.User.GetCurrentUser
 {
     public class GetCurrentUserQueryResponse
     {
-        public AppUser AppUser  { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+
     }
 }

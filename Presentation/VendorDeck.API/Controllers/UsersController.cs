@@ -52,7 +52,7 @@ namespace VendorDeck.API.Controllers
         public async Task<IActionResult> GetCurrentUser()
         {
             var userName = User.Identity.Name;
-            var request =new GetCurrentUserQueryRequest { Username = userName };
+            var request = new GetCurrentUserQueryRequest { Username = userName };
             var response = await _mediator.Send(request);
 
             return Ok(response);

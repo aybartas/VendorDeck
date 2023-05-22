@@ -20,7 +20,7 @@ namespace VendorDeck.Application.Features.Commands.AppUser.Login
             _tokenHandler = tokenHandler;
         }
 
-        public async Task<LoginCommandResponse> Handle(LoginCommandRequest request, CancellationToken cancellationToken)
+        public async Task<LoginCommandResponse> Handle(LoginCommandRequest request, CancellationToken cancellationToken = default)
         {
             User appUser;
 
@@ -37,7 +37,7 @@ namespace VendorDeck.Application.Features.Commands.AppUser.Login
 
             TokenDto token = await _tokenHandler.CreateAccessToken(appUser, 5); ;
 
-            return new LoginCommandResponse { Token= token, Username = appUser.UserName };
+            return new LoginCommandResponse { IsSuccess = true, Token = token.AccessToken };
         }
     } 
 }

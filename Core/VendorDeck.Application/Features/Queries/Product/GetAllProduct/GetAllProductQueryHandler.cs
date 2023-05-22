@@ -19,7 +19,7 @@ namespace VendorDeck.Application.Features.Queries.Product.GetAllProduct
         {
             this.productReadRepository = productReadRepository;
         }
-        public async Task<GetAllProductQueryResponse> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
+        public async Task<GetAllProductQueryResponse> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken = default)
         {
             var totalCount = productReadRepository.GetAll().Count();
 

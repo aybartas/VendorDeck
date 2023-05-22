@@ -17,7 +17,7 @@ namespace VendorDeck.Application.Features.Commands.Basket.CreateBasket
             _basketWriteRepository = basketWriteRepository;
         }
 
-        public async Task<CreateBasketCommandResponse> Handle(CreateBasketCommandRequest request, CancellationToken cancellationToken)
+        public async Task<CreateBasketCommandResponse> Handle(CreateBasketCommandRequest request, CancellationToken cancellationToken = default)
         {
             var response = new CreateBasketCommandResponse { Success= true };
             try

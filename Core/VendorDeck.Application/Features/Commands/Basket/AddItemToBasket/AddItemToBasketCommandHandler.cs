@@ -11,7 +11,7 @@ namespace VendorDeck.Application.Features.Commands.Basket.AddItemToBasket
         {
             _basketWriteRepository = basketWriteRepository;
         }
-        public async Task<AddItemToBasketCommandResponse> Handle(AddItemToBasketCommandRequest request, CancellationToken cancellationToken)
+        public async Task<AddItemToBasketCommandResponse> Handle(AddItemToBasketCommandRequest request, CancellationToken cancellationToken = default)
         {
             var result = new AddItemToBasketCommandResponse { Success = true };
             try
