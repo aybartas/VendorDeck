@@ -10,6 +10,5 @@ namespace VendorDeck.Application.Dtos
     {
         public string AccessToken { get; set; }
         public DateTime ExpireDate { get; set; }
-
     }
 }

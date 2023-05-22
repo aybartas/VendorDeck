@@ -12,7 +12,7 @@ namespace VendorDeck.Application.Features.Commands.Basket.RemoveItemFromBasket
             _basketWriteRepository = basketWriteRepository;
         }
 
-        public async Task<RemoveItemFromBasketResponse> Handle(RemoveItemFromBasketRequest request, CancellationToken cancellationToken)
+        public async Task<RemoveItemFromBasketResponse> Handle(RemoveItemFromBasketRequest request, CancellationToken cancellationToken = default)
         {
             var removeBasketItemResponse = new RemoveItemFromBasketResponse { Success = true };
             await _basketWriteRepository.RemoveItemFromBasket(request.Basket,request.ProductId, request.Quantity);

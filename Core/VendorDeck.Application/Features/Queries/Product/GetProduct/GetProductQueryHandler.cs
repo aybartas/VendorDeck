@@ -11,7 +11,7 @@ namespace VendorDeck.Application.Features.Queries.Product.GetProduct
         {
             _productReadRepository = productReadRepository;
         }
-        public async Task<GetProductQueryResponse> Handle(GetProductQueryRequest request, CancellationToken cancellationToken)
+        public async Task<GetProductQueryResponse> Handle(GetProductQueryRequest request, CancellationToken cancellationToken = default)
         {
             var product = await _productReadRepository.GetByIdAsync(request.ProductId);
             return new GetProductQueryResponse { Product = product };

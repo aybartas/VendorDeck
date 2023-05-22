@@ -17,7 +17,7 @@ namespace VendorDeck.Application.Features.Queries.Basket.GetBasket
             _basketReadRepository = basketReadRepository;
         }
 
-        public async Task<GetBasketQueryResponse> Handle(GetBasketQueryRequest request, CancellationToken cancellationToken)
+        public async Task<GetBasketQueryResponse> Handle(GetBasketQueryRequest request, CancellationToken cancellationToken = default)
         {
             var basket = await _basketReadRepository.GetSingleAsync(I => I.BuyerId == request.BuyerId.ToString());
 

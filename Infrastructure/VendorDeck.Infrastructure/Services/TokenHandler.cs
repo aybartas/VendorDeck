@@ -43,10 +43,10 @@ namespace VendorDeck.Infrastructure.Services
             }
 
             var securityToken = new JwtSecurityToken(
-                issuer: configuration["JwtConfig:ValidIssuer"].ToString(),
+                issuer: configuration["JwtConfig:ValidIssuer"],
+                audience: configuration["JwtConfig:ValidAudience"],
                 expires: expireDate,
                 claims: claims,
-                notBefore: DateTime.UtcNow,
                 signingCredentials: signInCredentials
                 );
 
