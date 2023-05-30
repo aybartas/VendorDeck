@@ -19,14 +19,16 @@ namespace VendorDeck.Application.Features.Commands.Basket.CreateBasket
 
         public async Task<CreateBasketCommandResponse> Handle(CreateBasketCommandRequest request, CancellationToken cancellationToken = default)
         {
-            var response = new CreateBasketCommandResponse { Success= true };
+            var response = new CreateBasketCommandResponse { Success = true };
             try
             {
                 await _basketWriteRepository.AddAsync(request.Basket);
+                await _basketWriteRepository.SaveAsync();
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                response.Success= false;
+                response.Success = false;
             }
             return response;
         }

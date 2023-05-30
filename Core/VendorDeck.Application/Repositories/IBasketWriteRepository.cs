@@ -6,6 +6,5 @@ namespace VendorDeck.Application.Repositories
     {
         Task AddItemToBasket(Basket basket, Product product, int quantity);
         Task RemoveItemFromBasket(Basket basket, int productId, int quantity);
-
     }
 }

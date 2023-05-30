@@ -17,7 +17,6 @@ namespace VendorDeck.Application.Features.Commands.Basket.AddItemToBasket
             try
             {
                 await _basketWriteRepository.AddItemToBasket(request.Basket, request.Product, request.Quantity);
-
             }
             catch (Exception)
             {
