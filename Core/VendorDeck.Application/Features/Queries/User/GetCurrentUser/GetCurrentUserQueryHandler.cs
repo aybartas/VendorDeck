@@ -13,9 +13,7 @@ namespace VendorDeck.Application.Features.Queries.User.GetCurrentUser
         }
         public async Task<GetCurrentUserQueryResponse> Handle(GetCurrentUserQueryRequest request, CancellationToken cancellationToken = default)
         {
-
             var user = await _userManager.FindByNameAsync(request.Username);
-
 
             return new GetCurrentUserQueryResponse { UserName = user.UserName, Email = user.Email };
         }

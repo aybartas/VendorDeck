@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using VendorDeck.Application.Dtos;
 using VendorDeck.Application.Features.Commands.Basket.AddItemToBasket;
@@ -27,20 +29,22 @@ namespace VendorDeck.API.Controllers
         [HttpGet(Name = "GetBasket")]
         public async Task<IActionResult> GetBasket()
         {
-            var buyerId = Request.Cookies["buyerId"];
+            var buyerId = User.Identity?.Name ?? Request.Cookies["buyerId"];
 
-            if (string.IsNullOrEmpty(buyerId)) return NotFound();
+            if (string.IsNullOrEmpty(buyerId))
+            {
+                Response.Cookies.Delete("buyerId");
+                return NotFound();
+            }
 
             var getBasketRequest = new GetBasketQueryRequest { BuyerId = buyerId };
-
             var basket = await _mediator.Send(getBasketRequest);
-
-            return basket is null ? NotFound() : Ok(basket);
-
+         
+            return Ok(basket);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToBasket( [FromBody]AddBasketDto basketItem)
+        public async Task<IActionResult> AddToBasket([FromBody] AddBasketDto basketItem)
         {
             var getProductRequest = new GetProductQueryRequest { ProductId = basketItem.ProductId };
             var productResponse = await _mediator.Send(getProductRequest);
@@ -48,20 +52,23 @@ namespace VendorDeck.API.Controllers
             if (productResponse.Product == null)
                 return NotFound();
 
-            var buyerId = Request.Cookies["buyerId"];
-            var getBasketQueryRequest = new GetBasketQueryRequest { BuyerId =  buyerId };
+            var buyerId = User.Identity?.Name ?? Request.Cookies["buyerId"];
+            var getBasketQueryRequest = new GetBasketQueryRequest { BuyerId = buyerId };
 
-            var basketResponse = await _mediator.Send(getBasketQueryRequest);
-
-            if (basketResponse?.Basket != null)
+            if (!string.IsNullOrEmpty(buyerId))
             {
-                var addItemToBasketRequest =  new AddItemToBasketCommandRequest { Basket= basketResponse.Basket ,Product = productResponse.Product, Quantity = basketItem.Quantity };
-                var addToBasketResponse = await _mediator.Send(addItemToBasketRequest);
+                var basketResponse = await _mediator.Send(getBasketQueryRequest);
 
-                return Created("", addToBasketResponse.Basket);
+                if (basketResponse?.Basket != null)
+                {
+                    var addItemToBasketRequest = new AddItemToBasketCommandRequest { Basket = basketResponse.Basket, Product = productResponse.Product, Quantity = basketItem.Quantity };
+                    var addToBasketResponse = await _mediator.Send(addItemToBasketRequest);
+
+                    return Created("", addToBasketResponse.Basket);
+                }
             }
 
-            buyerId = Guid.NewGuid().ToString();
+            buyerId = User.Identity?.Name ?? Guid.NewGuid().ToString();
             var cookieOptions = new CookieOptions
             {
                 IsEssential = true,
@@ -77,19 +84,18 @@ namespace VendorDeck.API.Controllers
                 BasketItems = { new BasketItem { Quantity = basketItem.Quantity, ProductId = basketItem.ProductId } }
             };
 
-            var createbasketRequest = new CreateBasketCommandRequest { Basket= newBasket };
+            var createbasketRequest = new CreateBasketCommandRequest { Basket = newBasket };
             var addBasketResult = await _mediator.Send(createbasketRequest);
 
-            return addBasketResult.Success ? CreatedAtRoute("GetBasket", newBasket) : BadRequest("Error creating basket");
+            return addBasketResult.Success ? CreatedAtRoute("GetBasket", JsonSerializer.Serialize(newBasket)) : BadRequest("Error creating basket");
         }
 
         [HttpDelete]
         public async Task<IActionResult> RemoveBasketItem(int productId, int quantity)
         {
-
             var buyerId = Request.Cookies["buyerId"];
 
-            if(string.IsNullOrEmpty(buyerId))
+            if (string.IsNullOrEmpty(buyerId))
                 return BadRequest("Buyer Not Found");
 
             var getBasketQueryRequest = new GetBasketQueryRequest { BuyerId = buyerId };
