@@ -19,8 +19,4 @@
     <ProjectReference Include="..\VendorDeck.Domain\VendorDeck.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Commands\Products\" />
-  </ItemGroup>
-
 </Project>

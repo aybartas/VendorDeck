@@ -18,6 +18,8 @@ namespace VendorDeck.Persistence.Context
             modelBuilder.ApplyConfiguration(new BasketMap());
             modelBuilder.ApplyConfiguration(new BasketItemMap());
             modelBuilder.ApplyConfiguration(new AppRoleMap());
+            modelBuilder.ApplyConfiguration(new OrderItemMap());
+            modelBuilder.ApplyConfiguration(new OrderMap());
 
             base.OnModelCreating(modelBuilder);
         }
@@ -43,9 +45,8 @@ namespace VendorDeck.Persistence.Context
 
             return await base.SaveChangesAsync(cancellationToken);
         }
-
         public DbSet<Product> Products { get; set; }
         public DbSet<Basket> Baskets { get; set; }
-
+        public DbSet<Order> Orders { get; set; }
     }
 }
