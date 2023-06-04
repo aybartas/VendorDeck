@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VendorDeck.Persistence.Context;
 
@@ -11,9 +12,11 @@ using VendorDeck.Persistence.Context;
 namespace VendorDeck.Persistence.Migrations
 {
     [DbContext(typeof(VendorDeckContext))]
-    partial class VendorDeckContextModelSnapshot : ModelSnapshot
+    [Migration("20230604004553_Address naming")]
+    partial class Addressnaming
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,7 +136,7 @@ namespace VendorDeck.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AppUserId")
+                    b.Property<int>("AppUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("City")
@@ -162,7 +165,7 @@ namespace VendorDeck.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("VendorDeck.Domain.Entities.Concrete.AppRole", b =>
@@ -198,14 +201,14 @@ namespace VendorDeck.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "f1219731-7874-44c0-b721-70929a326ff7",
+                            ConcurrencyStamp = "8a3a41f4-7320-434c-84bb-ee9f9d543f4d",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "712f37e6-ea88-49d1-af4f-2ff43d841337",
+                            ConcurrencyStamp = "fe7cdcff-7e2d-4f54-930b-fb907a748d5a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -220,6 +223,9 @@ namespace VendorDeck.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -746,9 +752,13 @@ namespace VendorDeck.Persistence.Migrations
 
             modelBuilder.Entity("VendorDeck.Domain.Entities.Concrete.Address", b =>
                 {
-                    b.HasOne("VendorDeck.Domain.Entities.Concrete.AppUser", null)
+                    b.HasOne("VendorDeck.Domain.Entities.Concrete.AppUser", "AppUser")
                         .WithMany("Addresses")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("VendorDeck.Domain.Entities.Concrete.BasketItem", b =>
@@ -777,32 +787,50 @@ namespace VendorDeck.Persistence.Migrations
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
 
+                            b1.Property<int>("AppUserId")
+                                .HasColumnType("int");
+
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ShippingAddressCity");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ShippingAddressCountry");
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime>("CreatedDate")
+                                .HasColumnType("datetime2");
 
                             b1.Property<string>("Details")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ShippingAddressDetails");
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("Id")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("LastModifiedDate")
+                                .HasColumnType("datetime2");
 
                             b1.Property<string>("State")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ShippingAddressState");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("OrderId");
 
+                            b1.HasIndex("AppUserId");
+
                             b1.ToTable("Orders");
+
+                            b1.HasOne("VendorDeck.Domain.Entities.Concrete.AppUser", "AppUser")
+                                .WithMany()
+                                .HasForeignKey("AppUserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");
+
+                            b1.Navigation("AppUser");
                         });
 
                     b.Navigation("ShippingAddress")
@@ -822,17 +850,14 @@ namespace VendorDeck.Persistence.Migrations
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Name");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("PictureUrl")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PictureUrl");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("ProductId")
-                                .HasColumnType("int")
-                                .HasColumnName("ProductId");
+                                .HasColumnType("int");
 
                             b1.HasKey("OrderItemId");
 

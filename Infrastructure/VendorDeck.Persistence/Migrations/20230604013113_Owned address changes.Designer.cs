@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VendorDeck.Persistence.Context;
 
@@ -11,9 +12,11 @@ using VendorDeck.Persistence.Context;
 namespace VendorDeck.Persistence.Migrations
 {
     [DbContext(typeof(VendorDeckContext))]
-    partial class VendorDeckContextModelSnapshot : ModelSnapshot
+    [Migration("20230604013113_Owned address changes")]
+    partial class Ownedaddresschanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,14 +201,14 @@ namespace VendorDeck.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "f1219731-7874-44c0-b721-70929a326ff7",
+                            ConcurrencyStamp = "8423dc98-e836-48ba-bff4-f25c8122d471",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "712f37e6-ea88-49d1-af4f-2ff43d841337",
+                            ConcurrencyStamp = "092ee29b-7b93-4eaa-80dd-84271881c83b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -791,6 +794,9 @@ namespace VendorDeck.Persistence.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ShippingAddressDetails");
+
+                            b1.Property<DateTime>("LastModifiedDate")
+                                .HasColumnType("datetime2");
 
                             b1.Property<string>("State")
                                 .IsRequired()
