@@ -14,6 +14,7 @@ namespace VendorDeck.Application.Repositories
         Task RemoveAsync(int id);
         void Update(T model);
         Task SaveAsync();
+        void UpdateRange(List<T> models);
 
     }
 }

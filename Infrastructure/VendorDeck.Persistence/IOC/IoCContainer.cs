@@ -36,6 +36,7 @@ namespace VendorDeck.Persistence.IOC
             services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
 
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
+
         }
     }
 }
