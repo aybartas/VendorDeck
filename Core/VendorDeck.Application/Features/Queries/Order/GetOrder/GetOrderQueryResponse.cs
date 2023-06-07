@@ -1,9 +1,9 @@
-﻿using OrderModel = VendorDeck.Domain.Entities.Concrete.Order;
+﻿using VendorDeck.Application.ViewModels;
 
 namespace VendorDeck.Application.Features.Queries.Order.GetOrder
 {
     public class GetOrderQueryResponse
     {
-         public OrderModel Order { get; set; }
+         public OrderViewModel Order { get; set; }
     }
 }

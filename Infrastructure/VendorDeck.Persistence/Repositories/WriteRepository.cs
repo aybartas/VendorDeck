@@ -44,7 +44,11 @@ namespace VendorDeck.Persistence.Repositories
         public virtual void Update(T model)
         {
             Table.Update(model);
+        }
 
+        public virtual void UpdateRange(List<T> models)
+        {
+            Table.UpdateRange(models);
         }
         public virtual async Task SaveAsync()
         {
