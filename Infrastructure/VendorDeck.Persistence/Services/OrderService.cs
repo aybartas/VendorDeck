@@ -65,6 +65,7 @@ namespace VendorDeck.Persistence.Services
 
             var subTotal = items.Sum(I => I.Price);
             var deliveryFee = orderDto.DeliveryFee;
+            var maxOrderNumber = await _orderReadRepository.GetMaxOrderNumber();
 
             var order = new Order
             {
@@ -75,7 +76,8 @@ namespace VendorDeck.Persistence.Services
                 DeliveryFee = deliveryFee,
                 Total = subTotal + deliveryFee,
                 OrderStatus = OrderStatus.Pending,
-                ShippingAddress = orderDto.ShippingAddress
+                ShippingAddress = orderDto.ShippingAddress,
+                OrderNumber = maxOrderNumber + 1
             };
 
             var createdOrder =  await _orderWriteRepository.AddAsync(order);

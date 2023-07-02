@@ -17,11 +17,9 @@ namespace VendorDeck.Persistence.Mappings
             builder.OwnsOne(e => e.ShippingAddress).Ignore(p => p.Id);
             builder.OwnsOne(e => e.ShippingAddress).Ignore(p => p.LastModifiedDate);
 
-            builder
-            .Property(e => e.OrderNumber)
-            .ValueGeneratedOnAdd();
+            builder.HasIndex(e => e.Id).IsUnique();
+            builder.HasIndex(e => e.OrderNumber).IsUnique();
 
-            builder .HasIndex(e => e.Id).IsUnique();
         }
     }
 }

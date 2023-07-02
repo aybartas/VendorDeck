@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using BasketEntity = VendorDeck.Domain.Entities.Concrete.Basket;
+using VendorDeck.Application.Dtos;
 
 namespace VendorDeck.Application.Features.Commands.Basket.RemoveItemFromBasket
 {
@@ -7,6 +7,6 @@ namespace VendorDeck.Application.Features.Commands.Basket.RemoveItemFromBasket
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public BasketEntity Basket { get; set; }
+        public BasketDto Basket { get; set; }
     }
 }

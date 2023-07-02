@@ -4,6 +4,5 @@ namespace VendorDeck.Application.Features.Commands.Basket.AddItemToBasket
     public class AddItemToBasketCommandResponse
     {
         public bool Success { get; set; }
-        public BasketEntity Basket { get; set; }
     }
 }

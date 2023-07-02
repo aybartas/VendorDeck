@@ -64,11 +64,12 @@ namespace VendorDeck.API.Controllers
                     var addItemToBasketRequest = new AddItemToBasketCommandRequest { Basket = basketResponse.Basket, Product = productResponse.Product, Quantity = basketItem.Quantity };
                     var addToBasketResponse = await _mediator.Send(addItemToBasketRequest);
 
-                    return Created("", addToBasketResponse.Basket);
+                    return addToBasketResponse.Success ?  NoContent() : BadRequest("Error adding item to basket");
                 }
             }
 
-            buyerId = User.Identity?.Name ?? Guid.NewGuid().ToString();
+            buyerId ??= Guid.NewGuid().ToString();
+
             var cookieOptions = new CookieOptions
             {
                 IsEssential = true,
@@ -87,7 +88,7 @@ namespace VendorDeck.API.Controllers
             var createbasketRequest = new CreateBasketCommandRequest { Basket = newBasket };
             var addBasketResult = await _mediator.Send(createbasketRequest);
 
-            return addBasketResult.Success ? CreatedAtRoute("GetBasket", JsonSerializer.Serialize(newBasket)) : BadRequest("Error creating basket");
+            return addBasketResult.Success ? Ok(newBasket) : BadRequest("Error creating basket");
         }
 
         [HttpDelete]

@@ -24,10 +24,10 @@ namespace VendorDeck.Application.Features.Commands.Basket.CreateBasket
             {
                 await _basketWriteRepository.AddAsync(request.Basket);
                 await _basketWriteRepository.SaveAsync();
-
             }
             catch (Exception ex)
             {
+                //TODOO  Log here
                 response.Success = false;
             }
             return response;

@@ -28,7 +28,7 @@ namespace VendorDeck.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] OrderDto order)
         {
             order.BuyerId = User.Identity.Name;
@@ -51,6 +51,7 @@ namespace VendorDeck.API.Controllers
                 Id = int.Parse(id)
             };
             var response = _mediator.Send(request);
+
             return Ok(response);
         }
 
