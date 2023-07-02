@@ -18,7 +18,7 @@ namespace VendorDeck.Application.Mapping
                         .ForMember(dest => dest.BuyerId, opt => opt.MapFrom(src => src.BuyerId))
                         .ForMember(dest => dest.BasketItems, opt => opt.MapFrom(src => src.BasketItems));
 
-            CreateMap<Basket, BasketDto>()
+            CreateMap<BasketDto, Basket>()
                         .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                         .ForMember(dest => dest.BuyerId, opt => opt.MapFrom(src => src.BuyerId))
                         .ForMember(dest => dest.BasketItems, opt => opt.MapFrom(src => src.BasketItems));

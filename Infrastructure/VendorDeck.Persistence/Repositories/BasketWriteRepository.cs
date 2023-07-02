@@ -1,4 +1,6 @@
-﻿using VendorDeck.Application.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using VendorDeck.Application.Repositories;
 using VendorDeck.Domain.Entities.Concrete;
 using VendorDeck.Persistence.Context;
 
@@ -23,9 +25,11 @@ namespace VendorDeck.Persistence.Repositories
             {
                 basket.BasketItems.Add(new BasketItem { Product = product, Quantity = quantity });
             }
-            var result = Table.Update(basket);
+
+            Table.Update(basket);
+
             await SaveAsync();
-            
+     
         }
 
         public async  Task RemoveItemFromBasket(Basket basket, int productId, int quantity)

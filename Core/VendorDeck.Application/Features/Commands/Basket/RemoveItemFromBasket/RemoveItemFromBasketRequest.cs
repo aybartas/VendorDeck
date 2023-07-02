@@ -7,6 +7,6 @@ namespace VendorDeck.Application.Features.Commands.Basket.RemoveItemFromBasket
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public BasketDto Basket { get; set; }
+        public string BuyerId { get; set; }
     }
 }

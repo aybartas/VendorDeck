@@ -46,26 +46,13 @@ namespace VendorDeck.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToBasket([FromBody] AddBasketDto basketItem)
         {
-            var getProductRequest = new GetProductQueryRequest { ProductId = basketItem.ProductId };
-            var productResponse = await _mediator.Send(getProductRequest);
-
-            if (productResponse.Product == null)
-                return NotFound();
-
             var buyerId = User.Identity?.Name ?? Request.Cookies["buyerId"];
-            var getBasketQueryRequest = new GetBasketQueryRequest { BuyerId = buyerId };
 
             if (!string.IsNullOrEmpty(buyerId))
             {
-                var basketResponse = await _mediator.Send(getBasketQueryRequest);
-
-                if (basketResponse?.Basket != null)
-                {
-                    var addItemToBasketRequest = new AddItemToBasketCommandRequest { Basket = basketResponse.Basket, Product = productResponse.Product, Quantity = basketItem.Quantity };
-                    var addToBasketResponse = await _mediator.Send(addItemToBasketRequest);
-
-                    return addToBasketResponse.Success ?  NoContent() : BadRequest("Error adding item to basket");
-                }
+                var addItemToBasketRequest = new AddItemToBasketCommandRequest { BuyerId = buyerId, ProductId = basketItem.ProductId, Quantity = basketItem.Quantity };
+                var addToBasketResponse = await _mediator.Send(addItemToBasketRequest);
+                return addToBasketResponse.Success ? NoContent() : BadRequest("Error adding item to basket");
             }
 
             buyerId ??= Guid.NewGuid().ToString();
@@ -108,7 +95,7 @@ namespace VendorDeck.API.Controllers
                 return NotFound("Basket not found");
             }
 
-            var removeItemFromBasketRequest = new RemoveItemFromBasketRequest { Basket = basketResponse.Basket, ProductId = productId, Quantity = quantity };
+            var removeItemFromBasketRequest = new RemoveItemFromBasketRequest { BuyerId = buyerId, ProductId = productId, Quantity = quantity };
 
             await _mediator.Send(removeItemFromBasketRequest);
 

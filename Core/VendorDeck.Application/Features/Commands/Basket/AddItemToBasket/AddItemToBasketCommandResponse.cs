@@ -1,8 +1,9 @@
-﻿using BasketEntity = VendorDeck.Domain.Entities.Concrete.Basket;
+﻿using VendorDeck.Application.Responses;
+using BasketEntity = VendorDeck.Domain.Entities.Concrete.Basket;
 namespace VendorDeck.Application.Features.Commands.Basket.AddItemToBasket
 {
-    public class AddItemToBasketCommandResponse
+    public class AddItemToBasketCommandResponse : BaseResponse
     {
-        public bool Success { get; set; }
+
     }
 }
