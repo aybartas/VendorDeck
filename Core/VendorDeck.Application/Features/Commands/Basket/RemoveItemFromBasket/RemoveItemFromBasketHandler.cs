@@ -21,7 +21,6 @@ namespace VendorDeck.Application.Features.Commands.Basket.RemoveItemFromBasket
         public async Task<RemoveItemFromBasketResponse> Handle(RemoveItemFromBasketRequest request, CancellationToken cancellationToken = default)
         {
             var removeItemResponse = await _basketService.RemoveItemFromBasket(request.BuyerId, request.ProductId, request.Quantity);
-
             var response = _mapper.Map<RemoveItemFromBasketResponse>(removeItemResponse);
             return response;
 

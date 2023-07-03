@@ -7,8 +7,10 @@ using VendorDeck.Application.Responses;
 
 namespace VendorDeck.Application.Features.Commands.Basket.RemoveItemFromBasket
 {
-    public class RemoveItemFromBasketResponse : BaseResponse
+    public class RemoveItemFromBasketResponse
     {
         public bool Success { get; set; }
+        public List<string> Errors { get; set; } = new();
+
     }
 }
