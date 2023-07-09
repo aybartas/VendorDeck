@@ -41,9 +41,9 @@ namespace VendorDeck.API.Controllers
 
                 return Ok(response);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Unauthorized();
+                return Unauthorized(ex.Message);
             }
         }
 
