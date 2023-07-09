@@ -57,7 +57,8 @@ namespace VendorDeck.Persistence.Services
                     Country = "",
                     City = "",
                     State = "",
-                    Details = "",
+                    Address1 = "",
+                    Address2 = "",
                 };
 
                 await _addressWriteRepository.AddAsync(address);

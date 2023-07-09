@@ -9,7 +9,7 @@ namespace VendorDeck.Persistence.Mappings
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.OwnsOne(e => e.ShippingAddress).Property(p => p.Details).HasColumnName("ShippingAddressDetails");
+            builder.OwnsOne(e => e.ShippingAddress).Property(p => p.Address1).HasColumnName("Address1");
             builder.OwnsOne(e => e.ShippingAddress).Property(p => p.Country).HasColumnName("ShippingAddressCountry");
             builder.OwnsOne(e => e.ShippingAddress).Property(p => p.City).HasColumnName("ShippingAddressCity");
             builder.OwnsOne(e => e.ShippingAddress).Property(p => p.State).HasColumnName("ShippingAddressState");
