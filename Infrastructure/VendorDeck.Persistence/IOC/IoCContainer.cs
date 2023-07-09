@@ -3,10 +3,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VendorDeck.Application.Abstractions.Services;
 using VendorDeck.Application.Repositories;
 using VendorDeck.Domain.Entities.Concrete;
 using VendorDeck.Persistence.Context;
 using VendorDeck.Persistence.Repositories;
+using VendorDeck.Persistence.Services;
 
 namespace VendorDeck.Persistence.IOC
 {
@@ -36,6 +38,10 @@ namespace VendorDeck.Persistence.IOC
             services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
 
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
+            services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
+
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IBasketService, BasketService>();
 
         }
     }

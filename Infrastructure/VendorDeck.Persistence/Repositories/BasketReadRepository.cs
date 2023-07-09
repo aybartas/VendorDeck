@@ -23,8 +23,8 @@ namespace VendorDeck.Persistence.Repositories
             var query = Table.AsQueryable();
             if (!useTracking)
                 query = query.AsNoTracking();
-            if(includeBaskettems)
-                query = query.Include(x => x.BasketItems);
+            if (includeBaskettems)
+                query = query.Include(x => x.BasketItems).ThenInclude(x => x.Product);
 
             return await query?.FirstOrDefaultAsync(method);
         }

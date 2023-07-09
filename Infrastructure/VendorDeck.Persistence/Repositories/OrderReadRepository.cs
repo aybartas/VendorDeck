@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Linq.Expressions;
 using VendorDeck.Application.Repositories;
 using VendorDeck.Domain.Entities.Concrete;
@@ -20,6 +21,14 @@ namespace VendorDeck.Persistence.Repositories
             if(includeOrderItems)
                 query = query.Include(x => x.OrderItems);
             return query;
+        }
+
+        public async Task<int> GetMaxOrderNumber()
+        {
+            var rowCount = Table.Count();
+            var maxOrderNumber = await Table.MaxAsync(order => order.OrderNumber);
+
+            return rowCount > 0 ?  maxOrderNumber: 0;
         }
 
         public async Task<Order?> GetOrderByIdAsync(int id, bool includeOrderItems = true, bool useTracking = true)

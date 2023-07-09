@@ -1,10 +1,10 @@
 ﻿
-using BasketEntity = VendorDeck.Domain.Entities.Concrete.Basket;
+using VendorDeck.Application.Dtos;
 
 namespace VendorDeck.Application.Features.Queries.Basket.GetBasket
 {
     public class GetBasketQueryResponse
     {
-        public BasketEntity Basket { get; set; }
+        public BasketDto Basket { get; set; }
     }
 }
