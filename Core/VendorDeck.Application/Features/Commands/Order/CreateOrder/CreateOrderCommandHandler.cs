@@ -13,7 +13,6 @@ namespace VendorDeck.Application.Features.Commands.Order.CreateOrder
         }
         public async Task<CreateOrderCommandResponse> Handle(CreateOrderCommandRequest request, CancellationToken cancellationToken)
         {
-
             var order = await _orderService.CreateOrder(request.Order);
 
             return new CreateOrderCommandResponse
