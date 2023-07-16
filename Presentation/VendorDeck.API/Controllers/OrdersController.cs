@@ -24,7 +24,7 @@ namespace VendorDeck.API.Controllers
         public async Task<IActionResult> GetOrders()
         {
             var request = new GetOrdersQueryRequest();
-            var response = _mediator.Send(request);
+            var response = await _mediator.Send(request);
             return Ok(response);
         }
 
@@ -38,7 +38,7 @@ namespace VendorDeck.API.Controllers
                 Order = order,
             };
 
-            var response = _mediator.Send(request);
+            var response = await _mediator.Send(request);
             return Ok(response);
         }
 
@@ -50,7 +50,7 @@ namespace VendorDeck.API.Controllers
                 Username = User.Identity.Name,
                 Id = int.Parse(id)
             };
-            var response = _mediator.Send(request);
+            var response = await _mediator.Send(request);
 
             return Ok(response);
         }

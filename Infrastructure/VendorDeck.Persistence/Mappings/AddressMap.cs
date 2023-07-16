@@ -13,7 +13,7 @@ namespace VendorDeck.Persistence.Mappings
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
-            builder.HasOne(I => I.AppUser).WithMany(I => I.Addresses).HasForeignKey(I => I.UserId);
+            builder.HasOne(I => I.AppUser).WithMany(I => I.Addresses).HasForeignKey(I => I.AppUserId);
         }
     }
 }

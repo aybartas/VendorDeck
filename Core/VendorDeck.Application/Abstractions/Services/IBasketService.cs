@@ -6,6 +6,7 @@ namespace VendorDeck.Application.Abstractions.Services
     {
         Task<BaseResponse> AddItemToBasket(string buyerId, int productId, int quantity);
         Task<BaseResponse> RemoveItemFromBasket(string buyerId, int productId, int quantity);
+        Task CreateNewBasket(string buyerId);
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using VendorDeck.Application.Abstractions.Services;
+﻿using Microsoft.AspNetCore.Identity;
+using VendorDeck.Application.Abstractions.Services;
 using VendorDeck.Application.Dtos;
 using VendorDeck.Application.Exceptions;
 using VendorDeck.Application.Repositories;
@@ -14,19 +15,23 @@ namespace VendorDeck.Persistence.Services
         private readonly IBasketWriteRepository _basketWriteRepository;
         private readonly IWriteRepository<Address> _addressWriteRepository;
         private readonly IOrderReadRepository _orderReadRepository;
+        private readonly UserManager<AppUser> _userManager;
 
         public OrderService(IWriteRepository<Order> writeRepository, IBasketReadRepository basketReadRepository, IBasketWriteRepository basketWriteRepository,
-            IWriteRepository<Address> addressWriteRepository, IOrderReadRepository orderReadRepository, IOrderWriteRepository orderWriteRepository)
+            IWriteRepository<Address> addressWriteRepository, IOrderReadRepository orderReadRepository, IOrderWriteRepository orderWriteRepository, UserManager<AppUser> userManager)
         {
             _basketReadRepository = basketReadRepository;
             _basketWriteRepository = basketWriteRepository;
             _addressWriteRepository = addressWriteRepository;
             _orderReadRepository = orderReadRepository;
             _orderWriteRepository = orderWriteRepository;
+            _userManager = userManager;
         }
         public async Task<Order> CreateOrder(OrderDto orderDto)
         {
             var basket = await _basketReadRepository.GetSingleAsync(I => I.BuyerId == orderDto.BuyerId);
+
+            var user = await _userManager.FindByNameAsync(orderDto.BuyerId);
 
             if (basket is null)
                 throw new BasketNotFoundException(orderDto.BuyerId);
@@ -52,16 +57,22 @@ namespace VendorDeck.Persistence.Services
             // Create addres if saved
             if (orderDto.SaveAddress)
             {
+
                 var address = new Address
                 {
-                    Country = "",
-                    City = "",
-                    State = "",
-                    Address1 = "",
-                    Address2 = "",
+                    FullName = orderDto.ShippingAddress?.FullName,
+                    Country = orderDto.ShippingAddress?.Country,
+                    City = orderDto.ShippingAddress?.City,
+                    State = orderDto.ShippingAddress?.State,
+                    Zip = orderDto.ShippingAddress?.Zip,
+                    Address1 = orderDto.ShippingAddress?.Address1,
+                    Address2 = orderDto.ShippingAddress?.Address2,
+                    AppUserId = user.Id
                 };
 
                 await _addressWriteRepository.AddAsync(address);
+                await _addressWriteRepository.SaveAsync();
+
             }
 
             var subTotal = items.Sum(I => I.Price);
@@ -81,13 +92,16 @@ namespace VendorDeck.Persistence.Services
                 OrderNumber = maxOrderNumber + 1
             };
 
-            var createdOrder =  await _orderWriteRepository.AddAsync(order);
+            var createdOrder = await _orderWriteRepository.AddAsync(order);
+            await _orderWriteRepository.SaveAsync();
 
-            // Remove existing basket
+            if (createdOrder is not null)
+            {
+                await _basketWriteRepository.RemoveAsync(basket.Id);
+                await _basketWriteRepository.SaveAsync();
+            }
 
-            await _basketWriteRepository.RemoveAsync(basket.Id);
-
-            return createdOrder;
+            return order;
         }
     }
 }

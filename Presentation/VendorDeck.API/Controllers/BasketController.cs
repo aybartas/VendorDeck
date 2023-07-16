@@ -48,40 +48,26 @@ namespace VendorDeck.API.Controllers
         {
             var buyerId = User.Identity?.Name ?? Request.Cookies["buyerId"];
 
-            if (!string.IsNullOrEmpty(buyerId))
+            var addItemToBasketRequest = new AddItemToBasketCommandRequest { BuyerId = buyerId, ProductId = basketItem.ProductId, Quantity = basketItem.Quantity };
+            var addToBasketResponse = await _mediator.Send(addItemToBasketRequest);
+
+            if(addToBasketResponse.SetNewBuyerId) 
             {
-                var addItemToBasketRequest = new AddItemToBasketCommandRequest { BuyerId = buyerId, ProductId = basketItem.ProductId, Quantity = basketItem.Quantity };
-                var addToBasketResponse = await _mediator.Send(addItemToBasketRequest);
-                return addToBasketResponse.Success ? NoContent() : BadRequest("Error adding item to basket");
+                var cookieOptions = new CookieOptions
+                {
+                    IsEssential = true,
+                    Expires = DateTime.Now.AddDays(30),
+                };
+                Response.Cookies.Append("buyerId", addToBasketResponse.NewBuyerId, cookieOptions);
             }
 
-            buyerId ??= Guid.NewGuid().ToString();
-
-            var cookieOptions = new CookieOptions
-            {
-                IsEssential = true,
-                Expires = DateTime.Now.AddDays(30),
-            };
-
-            Response.Cookies.Append("buyerId", buyerId, cookieOptions);
-
-            // create new basket 
-            var newBasket = new Basket
-            {
-                BuyerId = buyerId,
-                BasketItems = { new BasketItem { Quantity = basketItem.Quantity, ProductId = basketItem.ProductId } }
-            };
-
-            var createbasketRequest = new CreateBasketCommandRequest { Basket = newBasket };
-            var addBasketResult = await _mediator.Send(createbasketRequest);
-
-            return addBasketResult.Success ? Ok(newBasket) : BadRequest("Error creating basket");
+            return addToBasketResponse.Success ? Ok(addToBasketResponse) : BadRequest("Error creating basket");
         }
 
         [HttpDelete]
         public async Task<IActionResult> RemoveBasketItem(int productId, int quantity)
         {
-            var buyerId = Request.Cookies["buyerId"];
+            var buyerId = User.Identity?.Name ?? Request.Cookies["buyerId"];
 
             if (string.IsNullOrEmpty(buyerId))
                 return BadRequest("Buyer Not Found");

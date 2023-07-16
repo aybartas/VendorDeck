@@ -3,8 +3,7 @@
     public class CreateOrderCommandResponse 
     {
         public bool IsSuccess { get; set; }
-
-        public int MyProperty { get; set; }
+        public int OrderNumber { get; set; }
         public string ErrorMessage { get; set; }
     }
 }
