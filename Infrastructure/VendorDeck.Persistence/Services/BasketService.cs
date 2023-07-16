@@ -1,6 +1,8 @@
-﻿using VendorDeck.Application.Abstractions.Services;
+﻿using Azure.Core;
+using VendorDeck.Application.Abstractions.Services;
 using VendorDeck.Application.Repositories;
 using VendorDeck.Application.Responses;
+using VendorDeck.Domain.Entities.Concrete;
 
 namespace VendorDeck.Persistence.Services
 {
@@ -35,7 +37,7 @@ namespace VendorDeck.Persistence.Services
             if (basket is null)
             {
                 response.Success = false;
-                response.Errors.Add($"Basket with buyer id {buyerId}");
+                response.Errors.Add($"Basket with buyer id {buyerId} not found");
                 return response;
             }
 
@@ -44,6 +46,18 @@ namespace VendorDeck.Persistence.Services
             return response;
         }
 
+        public async Task CreateNewBasket(string buyerId)
+        {
+            var newBasket = new Basket
+            {
+                BuyerId = buyerId,
+                BasketItems =new()
+            };
+
+            await _basketWriteRepository.AddAsync(newBasket);
+            await _basketWriteRepository.SaveAsync();
+
+        }
 
         public async Task<BaseResponse> RemoveItemFromBasket(string buyerId, int productId, int quantity)
         {

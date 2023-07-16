@@ -26,9 +26,13 @@ namespace VendorDeck.Persistence.Repositories
         public async Task<int> GetMaxOrderNumber()
         {
             var rowCount = Table.Count();
+
+            if (rowCount == 0)
+                return 0;
+
             var maxOrderNumber = await Table.MaxAsync(order => order.OrderNumber);
 
-            return rowCount > 0 ?  maxOrderNumber: 0;
+            return maxOrderNumber;
         }
 
         public async Task<Order?> GetOrderByIdAsync(int id, bool includeOrderItems = true, bool useTracking = true)

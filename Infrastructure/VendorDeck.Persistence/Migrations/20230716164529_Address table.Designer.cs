@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VendorDeck.Persistence.Context;
 
@@ -11,9 +12,11 @@ using VendorDeck.Persistence.Context;
 namespace VendorDeck.Persistence.Migrations
 {
     [DbContext(typeof(VendorDeckContext))]
-    partial class VendorDeckContextModelSnapshot : ModelSnapshot
+    [Migration("20230716164529_Address table")]
+    partial class Addresstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,6 +141,7 @@ namespace VendorDeck.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Address2")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("AppUserId")
@@ -209,14 +213,14 @@ namespace VendorDeck.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "0550a40d-da69-4e79-b5af-86c5cbac7466",
+                            ConcurrencyStamp = "bfe9f521-b012-42e3-841d-c47dac245463",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "00162c88-f3a6-4c27-8850-ab8c8d4d27e4",
+                            ConcurrencyStamp = "e953af94-0f07-4dfe-a4d9-4a2b99721344",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -805,6 +809,7 @@ namespace VendorDeck.Persistence.Migrations
                                 .HasColumnName("Address1");
 
                             b1.Property<string>("Address2")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<int?>("AppUserId")
