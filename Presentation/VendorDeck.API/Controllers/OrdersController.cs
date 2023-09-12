@@ -23,7 +23,10 @@ namespace VendorDeck.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
-            var request = new GetOrdersQueryRequest();
+            var request = new GetOrdersQueryRequest
+            {
+                UserName = User.Identity.Name,
+            };
             var response = await _mediator.Send(request);
             return Ok(response);
         }

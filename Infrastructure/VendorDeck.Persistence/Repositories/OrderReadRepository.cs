@@ -14,9 +14,9 @@ namespace VendorDeck.Persistence.Repositories
         {
         }
 
-        public IQueryable<Order> GetAllOrders(bool useTracking = true, bool includeOrderItems = true)
+        public IQueryable<Order> GetAllOrders(Expression<Func<Order, bool>> method, bool useTracking = true, bool includeOrderItems = true)
         {
-            var query =  GetAll(useTracking);
+            var query = method is not null ? GetWhere(method,useTracking) : GetAll(useTracking);
 
             if(includeOrderItems)
                 query = query.Include(x => x.OrderItems);

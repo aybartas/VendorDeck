@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using VendorDeck.Domain.Entities.Concrete;
 
 namespace VendorDeck.Application.Features.Queries.User.GetCurrentUser
@@ -13,9 +14,9 @@ namespace VendorDeck.Application.Features.Queries.User.GetCurrentUser
         }
         public async Task<GetCurrentUserQueryResponse> Handle(GetCurrentUserQueryRequest request, CancellationToken cancellationToken = default)
         {
-            var user = await _userManager.FindByNameAsync(request.Username);
+            var user = await _userManager.Users.Include(I => I.Addresses).FirstOrDefaultAsync(x => x.UserName == request.Username);
 
-            return new GetCurrentUserQueryResponse { UserName = user.UserName, Email = user.Email };
+            return new GetCurrentUserQueryResponse { UserName = user?.UserName, Email = user?.Email, LastAddress = user?.Addresses?.LastOrDefault() };
         }
     }
 }

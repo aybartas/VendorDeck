@@ -11,6 +11,6 @@ namespace VendorDeck.Application.Features.Queries.User.GetCurrentUser
     {
         public string UserName { get; set; }
         public string Email { get; set; }
-
+        public Address LastAddress { get; set; }
     }
 }
