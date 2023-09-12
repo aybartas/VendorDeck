@@ -9,16 +9,15 @@ namespace VendorDeck.Persistence.Repositories
 {
     public class OrderReadRepository : ReadRepository<Order>, IOrderReadRepository
     {
-
-        public OrderReadRepository(VendorDeckContext context) :base(context)
+        public OrderReadRepository(VendorDeckContext context) : base(context)
         {
         }
 
         public IQueryable<Order> GetAllOrders(Expression<Func<Order, bool>> method, bool useTracking = true, bool includeOrderItems = true)
         {
-            var query = method is not null ? GetWhere(method,useTracking) : GetAll(useTracking);
+            var query = method is not null ? GetWhere(method, useTracking) : GetAll(useTracking);
 
-            if(includeOrderItems)
+            if (includeOrderItems)
                 query = query.Include(x => x.OrderItems);
             return query;
         }
@@ -34,27 +33,13 @@ namespace VendorDeck.Persistence.Repositories
 
             return maxOrderNumber;
         }
-
-        public async Task<Order?> GetOrderByIdAsync(int id, bool includeOrderItems = true, bool useTracking = true)
+  
+        public async override Task<Order?> GetByIdAsync(int id)
         {
-            var query = Table.AsQueryable();
-            if (!useTracking)
-                query = query.AsNoTracking();
-            if (includeOrderItems)
-                query = query.Include(x => x.OrderItems);
-
+            var query = Table.AsQueryable().Include(x => x.OrderItems);
+         
             return await query?.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<Order> GetSingleOrderAsync(Expression<Func<Order, bool>> method, bool useTracking = true, bool includeOrderItems = true)
-        {
-            var query = Table.AsQueryable();
-            if (!useTracking)
-                query = query.AsNoTracking();
-            if (includeOrderItems)
-                query = query.Include(x => x.OrderItems);
-
-            return await query?.FirstOrDefaultAsync(method);
-        }
     }
 }

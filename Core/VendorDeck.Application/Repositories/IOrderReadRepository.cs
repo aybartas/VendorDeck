@@ -6,8 +6,6 @@ namespace VendorDeck.Application.Repositories
     public interface IOrderReadRepository : IReadRepository<Order>
     {
         IQueryable<Order> GetAllOrders(Expression<Func<Order, bool>> method, bool useTracking = true, bool includeOrderItems = true);
-        Task<Order> GetSingleOrderAsync(Expression<Func<Order, bool>> method, bool useTracking = true, bool includeOrderItems = true);
-        Task<Order> GetOrderByIdAsync(int id, bool includeOrderItems = true, bool useTracking = true);
         Task<int> GetMaxOrderNumber();
 
     }
