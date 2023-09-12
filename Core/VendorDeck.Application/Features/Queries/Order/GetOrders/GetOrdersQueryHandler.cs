@@ -19,7 +19,7 @@ namespace VendorDeck.Application.Features.Queries.Order.GetOrders
         }
         public async Task<GetOrdersQueryResponse> Handle(GetOrdersQueryRequest request, CancellationToken cancellationToken)
         {
-            var orderList = await  _orderReadRepository.GetAllOrders().ToListAsync();
+            var orderList = await  _orderReadRepository.GetAllOrders(order => order.BuyerId == request.UserName).ToListAsync();
             var orders = _mapper.Map<List<OrderViewModel>>(orderList);
             var response = new GetOrdersQueryResponse
             {

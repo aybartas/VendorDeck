@@ -1,22 +1,16 @@
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Linq;
 using System.Text;
-using VendorDeck.API.ActionFilters;
 using VendorDeck.API.Middlewares;
 using VendorDeck.Application;
 using VendorDeck.Application.Validators;
-using VendorDeck.Domain.Entities.Concrete;
 using VendorDeck.Infrastructure;
 using VendorDeck.Persistence.IOC;
 
@@ -34,10 +28,14 @@ namespace VendorDeck.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-).AddFluentValidation(config =>
-            config.RegisterValidatorsFromAssemblyContaining<AddProductValidator>());
+            services
+                .AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<AddProductValidator>())
+                .AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.Converters.Add(new OrderStatusConverter());
+                    }); 
 
             services.AddSwaggerGen(c =>
             {
@@ -45,8 +43,8 @@ namespace VendorDeck.API
             });
             services.AddPersistenceServices(Configuration);
             services.AddApplicationServices();
-            services.AddInfrastructureServices();
-
+            services.AddInfrastructureServices(Configuration);
+            services.AddMemoryCache();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,7 +52,7 @@ namespace VendorDeck.API
             })
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = false; 
+                options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuerSigningKey = true,
@@ -73,6 +71,7 @@ namespace VendorDeck.API
                 //opt.LogoutPath = "Account/Login";
             });
             services.AddCors();
+
             //services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
         }
 
