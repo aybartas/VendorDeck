@@ -3,19 +3,19 @@ using VendorDeck.Application.Abstractions.Services;
 
 namespace VendorDeck.Application.Features.Commands.Order.CreateOrder
 {
-    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommandRequest, CreateOrderCommandResponse>
+    public class CreatePaymentIntentCommandHandler : IRequestHandler<CreatePaymentIntentCommandRequest, CreatePaymentIntentCommandResponse>
     {
         private readonly IOrderService _orderService;
 
-        public CreateOrderCommandHandler(IOrderService orderService)
+        public CreatePaymentIntentCommandHandler(IOrderService orderService)
         {
             _orderService = orderService;
         }
-        public async Task<CreateOrderCommandResponse> Handle(CreateOrderCommandRequest request, CancellationToken cancellationToken)
+        public async Task<CreatePaymentIntentCommandResponse> Handle(CreatePaymentIntentCommandRequest request, CancellationToken cancellationToken)
         {
             var order = await _orderService.CreateOrder(request.Order);
 
-            return new CreateOrderCommandResponse
+            return new CreatePaymentIntentCommandResponse
             {
                 IsSuccess = true,
                 OrderNumber = order.OrderNumber,
