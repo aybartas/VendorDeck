@@ -20,6 +20,8 @@ namespace VendorDeck.Infrastructure
             });
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<ITokenHandler, TokenHandler>();
+            services.AddScoped<IPaymentService, PaymentService>();
+
         }
     }
 }
