@@ -11,10 +11,10 @@ namespace VendorDeck.Domain.Entities.Concrete
         public List<OrderItem> OrderItems { get; set; }
         public decimal SubTotal { get; set; }
         public decimal DeliveryFee { get; set; }
-
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
         public ShippingAddress ShippingAddress { get; set; }
         public decimal Total { get; set; }
+        public string PaymentIntentId { get; set; }
 
     }
 }
