@@ -23,7 +23,6 @@ namespace VendorDeck.Application.Features.Commands.Payment.CreatePaymentIntent
         public async Task<SavePaymentIntentCommandResponse> Handle(SavePaymentIntentCommandRequest request, CancellationToken cancellationToken)
         {
             var basket = await _basketReadRepository.GetSingleAsync(I => I.BuyerId == request.UserName.ToString());
-
             var saveResponse = await _paymentService.SavePayment(basket);
 
             if (saveResponse.Successs)

@@ -5,7 +5,7 @@ namespace VendorDeck.Application.Abstractions.Services
 {
     public interface IPaymentService
     {
-        public Task<PaymentIntentDto> SavePayment(Basket basket);
-
+        Task<PaymentIntentDto> SavePayment(Basket basket);
+        PaymentIntentDto GetPaymentFromStripeResponse(string response, string stripeSigniture);
     }
 }

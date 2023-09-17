@@ -89,7 +89,8 @@ namespace VendorDeck.Persistence.Services
                 Total = subTotal + deliveryFee,
                 OrderStatus = OrderStatus.Pending,
                 ShippingAddress = orderDto.ShippingAddress,
-                OrderNumber = maxOrderNumber + 1
+                OrderNumber = maxOrderNumber + 1,
+                PaymentIntentId = basket.PaymentIntentId
             };
 
             var createdOrder = await _orderWriteRepository.AddAsync(order);

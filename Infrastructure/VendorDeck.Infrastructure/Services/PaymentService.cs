@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Stripe;
 using VendorDeck.Application.Abstractions.Services;
@@ -14,6 +14,20 @@ namespace VendorDeck.Infrastructure.Services
         public PaymentService(IConfiguration config)
         {
             this.config = config;
+        }
+
+        public PaymentIntentDto GetPaymentFromStripeResponse (string response, string stripeSigniture)
+        {
+            var webHookKey =  config["StripeSettings:WebHookKey"];
+            var stripeEvent = EventUtility.ConstructEvent(response, stripeSigniture, webHookKey);
+            var charge = (Charge)stripeEvent.Data.Object;
+            var paymentIntentId = charge.PaymentIntentId;
+
+            return new PaymentIntentDto
+            {
+                PaymentIntentId = paymentIntentId,
+                Successs = charge.Status == "success",
+            };
         }
 
         public async Task<PaymentIntentDto> SavePayment(Basket basket)
