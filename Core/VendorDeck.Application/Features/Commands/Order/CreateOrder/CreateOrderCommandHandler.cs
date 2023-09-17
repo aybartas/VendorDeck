@@ -18,7 +18,6 @@ namespace VendorDeck.Application.Features.Commands.Order.CreateOrder
             return new CreateOrderCommandResponse
             {
                 IsSuccess = true,
-                OrderNumber = order.OrderNumber,
             };
         }
     }

@@ -5,6 +5,7 @@ namespace VendorDeck.Application.ViewModels
 {
     public class OrderViewModel
     {
+        public int Id { get; set; }
         public string BuyerId { get; set; }
         public DateTime OrderDate { get; set; }
         public int OrderNumber { get; set; }

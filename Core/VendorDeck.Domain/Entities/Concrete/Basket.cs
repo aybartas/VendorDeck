@@ -10,6 +10,8 @@ namespace VendorDeck.Domain.Entities.Concrete
     public class Basket : BaseEntity, ITable
     {
         public string BuyerId { get; set; }
+        public string PaymentIntentId { get; set; }
+        public string ClientSecret { get; set; }
         public List<BasketItem> BasketItems { get; set; } = new();
 
     }
