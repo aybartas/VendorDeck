@@ -209,14 +209,14 @@ namespace VendorDeck.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "ba7d1643-90c8-43f4-9d94-9fc690d85182",
+                            ConcurrencyStamp = "ab78444b-a5de-4eb3-884b-0a76eae28f38",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "9be5e549-008a-41de-9fd4-1d26da24c3ff",
+                            ConcurrencyStamp = "b55b598b-4ffd-4750-b0fb-0c2da432cd9a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

@@ -11,6 +11,7 @@ namespace VendorDeck.Persistence.Context
     {
         public VendorDeckContext(DbContextOptions options) : base(options)
         {
+            
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
