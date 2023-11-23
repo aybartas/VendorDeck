@@ -22,10 +22,6 @@ namespace VendorDeck.Infrastructure
             //    opt.InstanceName = "VendorDeck_";
             //});
 
-            //services.AddScoped<ICacheService, CacheService>();
-            services.AddScoped<ITokenHandler, TokenHandler>();
-            services.AddScoped<IPaymentService, PaymentService>();
-            services.AddScoped<IImageService, ImageService>();
 
             var cloudinaryAccount = new CloudinaryDotNet.Account
             {
@@ -35,6 +31,10 @@ namespace VendorDeck.Infrastructure
             };
 
             services.AddSingleton(new Cloudinary(cloudinaryAccount));
+            services.AddScoped<ITokenHandler, TokenHandler>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IImageService, ImageService>();
+            //services.AddScoped<ICacheService, CacheService>();
 
         }
     }

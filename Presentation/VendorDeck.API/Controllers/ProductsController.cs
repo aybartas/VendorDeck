@@ -52,7 +52,7 @@ namespace VendorDeck.API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(ProductDto product)
+        public async Task<IActionResult> CreateProduct([FromForm] ProductDto product)
         {
             var requst = new CreateProductCommandRequest { Product=product};
             var response = await _mediator.Send(requst);
@@ -61,7 +61,7 @@ namespace VendorDeck.API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<IActionResult> UpdateProduct(ProductDto product)
+        public async Task<IActionResult> UpdateProduct([FromForm] ProductDto product)
         {
             var requst = new UpdateProductCommandRequest { Product = product };
             var response = await _mediator.Send(requst);
@@ -74,7 +74,7 @@ namespace VendorDeck.API.Controllers
         {
             var requst = new DeleteProductCommandRequest { ProductId = productId };
             var response = await _mediator.Send(requst);
-            return response.IsSuccess ? NoContent() : BadRequest(new ProblemDetails { Title = "Error updating product", Detail = response.ErrorMessage });
+            return response.IsSuccess ? NoContent() : BadRequest(new ProblemDetails { Title = "Error deleting product", Detail = response.ErrorMessage });
         }
 
 
