@@ -22,12 +22,10 @@ namespace VendorDeck.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        //private readonly ICacheService _cacheService;
 
-        public ProductsController(IMediator mediator, ICacheService cacheService)
+        public ProductsController(IMediator mediator)
         {
             _mediator = mediator;
-            //_cacheService = cacheService;
         }
 
         [HttpGet]

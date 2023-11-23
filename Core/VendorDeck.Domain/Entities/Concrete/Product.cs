@@ -16,6 +16,6 @@ namespace VendorDeck.Domain.Entities.Concrete
         public string Type { get; set; }
         public string Brand { get; set; }
         public int Stock { get; set; }
-
+        public string PublicId { get; set; }
     }
 }

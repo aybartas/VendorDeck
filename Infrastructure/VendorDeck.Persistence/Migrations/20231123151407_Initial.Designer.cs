@@ -12,7 +12,7 @@ using VendorDeck.Persistence.Context;
 namespace VendorDeck.Persistence.Migrations
 {
     [DbContext(typeof(VendorDeckContext))]
-    [Migration("20231112104953_Initial")]
+    [Migration("20231123151407_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -212,14 +212,14 @@ namespace VendorDeck.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "ab78444b-a5de-4eb3-884b-0a76eae28f38",
+                            ConcurrencyStamp = "472594f3-1277-4d83-8745-72e265e22e55",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "b55b598b-4ffd-4750-b0fb-0c2da432cd9a",
+                            ConcurrencyStamp = "e32e34fd-ca9a-463e-abd3-b04b7bd00ca0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -479,6 +479,9 @@ namespace VendorDeck.Persistence.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");

@@ -11,6 +11,7 @@ namespace VendorDeck.DataAccess.Mappings
         {
             builder.Property(x => x.Id).UseIdentityColumn(1,1);
             builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
+            builder.Property(x => x.PublicId).IsRequired(false);
             builder.Property(x => x.Description).HasMaxLength(1000);
             builder.HasData((IEnumerable<object>)VendorDeckDbInitializer.GetSeedProducts());
         }

@@ -14,14 +14,15 @@ namespace VendorDeck.Infrastructure
     {
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var redisConnection = configuration["RedisConnectionString"];
+            //var redisConnection = configuration["RedisConnectionString"];
 
-            services.AddStackExchangeRedisCache(opt =>
-            {
-                opt.Configuration = redisConnection;
-                opt.InstanceName = "VendorDeck_";
-            });
-            services.AddScoped<ICacheService, CacheService>();
+            //services.AddStackExchangeRedisCache(opt =>
+            //{
+            //    opt.Configuration = redisConnection;
+            //    opt.InstanceName = "VendorDeck_";
+            //});
+
+            //services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<ITokenHandler, TokenHandler>();
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IImageService, ImageService>();
@@ -33,7 +34,8 @@ namespace VendorDeck.Infrastructure
                 ApiSecret = configuration["Cloudinary:APISecret"],
             };
 
-            services.AddSingleton(new Cloudinary(cloudinaryAccount)); 
+            services.AddSingleton(new Cloudinary(cloudinaryAccount));
+
         }
     }
 }
