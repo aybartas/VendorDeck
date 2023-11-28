@@ -38,7 +38,7 @@ namespace VendorDeck.Infrastructure.Services
             var cloudinaryResult  = await _cloudinary.UploadAsync(uploadParams);
 
             uploadResult.Url = cloudinaryResult.SecureUrl;
-            uploadResult.IsSuccess = cloudinaryResult.StatusCode == System.Net.HttpStatusCode.Created;
+            uploadResult.IsSuccess = cloudinaryResult.StatusCode == System.Net.HttpStatusCode.OK;
             uploadResult.PublicId = cloudinaryResult.PublicId;
 
             return uploadResult;

@@ -56,7 +56,7 @@ namespace VendorDeck.API.Controllers
         {
             var requst = new CreateProductCommandRequest { Product=product};
             var response = await _mediator.Send(requst);
-            return CreatedAtRoute("GetProduct", new { Id = response.ProductId}, product);
+            return CreatedAtRoute("GetProduct", new { response.Product.Id}, response.Product);
         }
 
         [Authorize(Roles = "Admin")]

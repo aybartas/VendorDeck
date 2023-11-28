@@ -35,7 +35,7 @@ namespace VendorDeck.Application.Features.Commands.AppUser.Login
             if (!signInResult.Succeeded)
                 throw new LoginErrorException();
 
-            TokenDto token = await _tokenHandler.CreateAccessToken(appUser, 5); ;
+            TokenDto token = await _tokenHandler.CreateAccessToken(appUser,360); ;
 
             return new LoginCommandResponse { IsSuccess = true, Token = token.AccessToken };
         }

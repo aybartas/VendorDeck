@@ -2,26 +2,26 @@
 using MediatR;
 using VendorDeck.Application.Abstractions.Services;
 using VendorDeck.Application.Repositories;
+using VendorDeck.Application.ViewModels;
 using ProductEntity = VendorDeck.Domain.Entities.Concrete.Product;
 
 namespace VendorDeck.Application.Features.Commands.Product.CreateProduct
 {
-    public class UpdateProductCommandHandler : IRequestHandler<CreateProductCommandRequest, UpdateProductCommandResponse>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandRequest, CreateProductCommandResponse>
     {
 
         private readonly IWriteRepository<ProductEntity> _productWriteRepository;
         private readonly IMapper _mapper;
         private readonly IImageService _imageService;
-        public UpdateProductCommandHandler(IWriteRepository<ProductEntity> productWriteRepository, IMapper mapper, IImageService imageService)
+        public CreateProductCommandHandler(IWriteRepository<ProductEntity> productWriteRepository, IMapper mapper, IImageService imageService)
         {
             _productWriteRepository = productWriteRepository;
             _mapper = mapper;
             _imageService = imageService;
         }
-        public async Task<UpdateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
+        public async Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
         {
-            var result = new UpdateProductCommandResponse() { IsSuccess = true };
-
+            var result = new CreateProductCommandResponse() { IsSuccess = true };
 
             var imageResult = await _imageService.UploadImage(request.Product.ImageFile);
 
@@ -32,16 +32,16 @@ namespace VendorDeck.Application.Features.Commands.Product.CreateProduct
                 return result;
             }
 
-
             var product = _mapper.Map<ProductEntity>(request.Product);
 
             product.ImageUrl = imageResult.Url.ToString();
 
             await _productWriteRepository.AddAsync(product);
-
             await _productWriteRepository.SaveAsync();
 
-            result.ProductId = product?.Id ?? 0;
+            var productViewModel = _mapper.Map<ProductViewModel>(product);
+
+            result.Product = productViewModel;
 
             return result;
 
