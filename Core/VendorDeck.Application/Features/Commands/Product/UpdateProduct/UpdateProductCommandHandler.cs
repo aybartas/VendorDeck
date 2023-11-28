@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using VendorDeck.Application.Abstractions.Services;
 using VendorDeck.Application.Features.Commands.Product.CreateProduct;
 using VendorDeck.Application.Features.Commands.Product.DeleteProduct;
 using VendorDeck.Application.Repositories;
@@ -12,13 +13,15 @@ namespace VendorDeck.Application.Features.Commands.Product.UpdateProduct
 
         private readonly IWriteRepository<ProductEntity> _productWriteRepository;
         private readonly IReadRepository<ProductEntity> _productReadRepository;
+        private readonly IImageService _imageService;
 
         private readonly IMapper _mapper;
-        public UpdateProductCommandHandler(IWriteRepository<ProductEntity> productWriteRepository, IMapper mapper, IReadRepository<ProductEntity> productReadRepository)
+        public UpdateProductCommandHandler(IWriteRepository<ProductEntity> productWriteRepository, IMapper mapper, IReadRepository<ProductEntity> productReadRepository, IImageService imageService)
         {
             _productWriteRepository = productWriteRepository;
             _mapper = mapper;
             _productReadRepository = productReadRepository;
+            _imageService = imageService;
         }
 
         public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
@@ -32,6 +35,36 @@ namespace VendorDeck.Application.Features.Commands.Product.UpdateProduct
                 response.IsSuccess = false;
                 response.ErrorMessage = "Product not exist";
                 return response;
+            }
+
+            if(request.Product.ImageFile != null)
+            {
+                var imageResult = await _imageService.UploadImage(request.Product.ImageFile);
+
+                if (!imageResult.IsSuccess)
+                {
+                    response.IsSuccess = false;
+                    response.ErrorMessage = imageResult.Error;
+                    return response;
+                }
+
+                var legacyImageId = existingProduct.PublicId;
+
+                if (!string.IsNullOrEmpty(legacyImageId))
+                {
+                    var legacyImage = await _imageService.DeleteImage(legacyImageId);
+
+                    if (!legacyImage)
+                    {
+                        response.IsSuccess = false;
+                        response.ErrorMessage = "Error removing legacy image";
+                        return response;
+                    }
+                }
+
+                existingProduct.ImageUrl = imageResult.Url.ToString();
+                existingProduct.PublicId = imageResult.PublicId;
+
             }
 
             _mapper.Map(request.Product, existingProduct);
