@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VendorDeck.Persistence.Context;
 
@@ -11,9 +12,11 @@ using VendorDeck.Persistence.Context;
 namespace VendorDeck.Persistence.Migrations
 {
     [DbContext(typeof(VendorDeckContext))]
-    partial class VendorDeckContextModelSnapshot : ModelSnapshot
+    [Migration("20231224155552_iniial")]
+    partial class iniial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,14 +212,14 @@ namespace VendorDeck.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "10627d40-fed4-408a-96ee-52e3ae429c22",
+                            ConcurrencyStamp = "801e7c92-9b47-48b3-8454-6aad1d69e3f7",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "6b083039-f9dc-4b43-9b9a-5e0be2b567ee",
+                            ConcurrencyStamp = "1662a10b-78bc-4ff3-8f28-3c56c7a80306",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

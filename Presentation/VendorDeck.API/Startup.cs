@@ -35,7 +35,7 @@ namespace VendorDeck.API
                 .AddJsonOptions(options =>
                     {
                         options.JsonSerializerOptions.Converters.Add(new OrderStatusConverter());
-                    }); 
+                    });
 
             services.AddSwaggerGen(c =>
             {
@@ -107,11 +107,10 @@ namespace VendorDeck.API
 
             app.UseMiddleware<ExceptionMiddleware>();
 
-            if (env.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
+
+
 
             app.UseExceptionHandler("/Error");
             //app.UseHttpsRedirection();

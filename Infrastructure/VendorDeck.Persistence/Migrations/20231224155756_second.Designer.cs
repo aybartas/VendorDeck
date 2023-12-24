@@ -12,8 +12,8 @@ using VendorDeck.Persistence.Context;
 namespace VendorDeck.Persistence.Migrations
 {
     [DbContext(typeof(VendorDeckContext))]
-    [Migration("20231123151407_Initial")]
-    partial class Initial
+    [Migration("20231224155756_second")]
+    partial class second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -212,14 +212,14 @@ namespace VendorDeck.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "472594f3-1277-4d83-8745-72e265e22e55",
+                            ConcurrencyStamp = "10627d40-fed4-408a-96ee-52e3ae429c22",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "e32e34fd-ca9a-463e-abd3-b04b7bd00ca0",
+                            ConcurrencyStamp = "6b083039-f9dc-4b43-9b9a-5e0be2b567ee",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace VendorDeck.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class iniial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -322,8 +322,8 @@ namespace VendorDeck.Persistence.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "472594f3-1277-4d83-8745-72e265e22e55", "Member", "MEMBER" },
-                    { 2, "e32e34fd-ca9a-463e-abd3-b04b7bd00ca0", "Admin", "ADMIN" }
+                    { 1, "801e7c92-9b47-48b3-8454-6aad1d69e3f7", "Member", "MEMBER" },
+                    { 2, "1662a10b-78bc-4ff3-8f28-3c56c7a80306", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(

@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql-server
+  vendordeck.api:
+    image: vendordeckapi
+    container_name: vendordeckapi
+    build:
+      context: .
+      dockerfile: Presentation/VendorDeck.API/Dockerfile
+volumes:
+  sqlserver_volume:
+  

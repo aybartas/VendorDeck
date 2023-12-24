@@ -68,7 +68,7 @@ namespace VendorDeck.API.Controllers
             return response.IsSuccess ? NoContent() : BadRequest(new ProblemDetails { Title = "Error updating product",Detail = response.ErrorMessage});
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{productId}")]
         public async Task<IActionResult> DeleteProduct(int productId)
         {
