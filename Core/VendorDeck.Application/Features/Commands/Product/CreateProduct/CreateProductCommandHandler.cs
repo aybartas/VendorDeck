@@ -23,7 +23,7 @@ namespace VendorDeck.Application.Features.Commands.Product.CreateProduct
         {
             var result = new CreateProductCommandResponse() { IsSuccess = true };
 
-            var imageResult = await _imageService.UploadImage(request.Product.ImageFile);
+            var imageResult = await _imageService.UploadImage(request.Product.File);
 
             if (!imageResult.IsSuccess)
             {

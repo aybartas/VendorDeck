@@ -37,9 +37,9 @@ namespace VendorDeck.Application.Features.Commands.Product.UpdateProduct
                 return response;
             }
 
-            if(request.Product.ImageFile != null)
+            if(request.Product.File != null)
             {
-                var imageResult = await _imageService.UploadImage(request.Product.ImageFile);
+                var imageResult = await _imageService.UploadImage(request.Product.File);
 
                 if (!imageResult.IsSuccess)
                 {

@@ -50,7 +50,7 @@ namespace VendorDeck.API.Controllers
             return product is null ? NotFound("Product not found") : Ok(product);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromForm] ProductDto product)
         {
@@ -59,7 +59,7 @@ namespace VendorDeck.API.Controllers
             return CreatedAtRoute("GetProduct", new { response.Product.Id}, response.Product);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateProduct([FromForm] ProductDto product)
         {
