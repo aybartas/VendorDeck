@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VendorDeck.API", "Presentation\VendorDeck.API\VendorDeck.API.csproj", "{97A7658B-3BB7-4B41-9AB2-70B132A5730B}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{28B410CB-EFEF-404B-BFBD-10F4039FC7B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{97A7658B-3BB7-4B41-9AB2-70B132A5730B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97A7658B-3BB7-4B41-9AB2-70B132A5730B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97A7658B-3BB7-4B41-9AB2-70B132A5730B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28B410CB-EFEF-404B-BFBD-10F4039FC7B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28B410CB-EFEF-404B-BFBD-10F4039FC7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28B410CB-EFEF-404B-BFBD-10F4039FC7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28B410CB-EFEF-404B-BFBD-10F4039FC7B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

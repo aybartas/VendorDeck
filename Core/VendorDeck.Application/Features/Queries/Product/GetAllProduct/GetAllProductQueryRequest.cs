@@ -12,6 +12,7 @@ namespace VendorDeck.Application.Features.Queries.Product.GetAllProduct
         public bool? Ascending { get; set; } = true;
         public string? SortBy { get; set; }
         public string? SearchText { get; set; }
+        public string? ProductName { get; set; }
         public string? Brands { get; set; }
         public string? Types { get; set; }
         public decimal? MinPrice { get; set; }
@@ -36,8 +37,15 @@ namespace VendorDeck.Application.Features.Queries.Product.GetAllProduct
 
         public IQueryable<ProductEntity> ApplyFiltering(IQueryable<ProductEntity> query)
         {
+
             if (!string.IsNullOrEmpty(SearchText))
-                query = query.Where(x => x.Name.Contains(SearchText));
+                query = query.Where(
+                    x => x.Name.Contains(SearchText) ||
+                    x.Type.Contains(SearchText) ||
+                    x.Brand.Contains(SearchText));
+
+            if (!string.IsNullOrEmpty(ProductName))
+                query = query.Where(x => x.Name.Contains(ProductName));
 
             if (!string.IsNullOrEmpty(Brands))
             {

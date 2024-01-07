@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using VendorDeck.Application.Constants;
 using VendorDeck.Application.Exceptions;
 using VendorDeck.Application.Features.Commands.AppUser.Register;
+using VendorDeck.Domain.Constants;
 using User = VendorDeck.Domain.Entities.Concrete.AppUser;
 
 namespace VendorDeck.Application.Features.Commands.AppUser
@@ -19,8 +19,6 @@ namespace VendorDeck.Application.Features.Commands.AppUser
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken = default)
         {
-            //TODO map with automapper 
-
             var result = new CreateUserCommandResponse { Success= true };
             var memberRole = RoleTypes.Member;
 

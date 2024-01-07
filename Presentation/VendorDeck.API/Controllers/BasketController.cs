@@ -34,7 +34,7 @@ namespace VendorDeck.API.Controllers
             if (string.IsNullOrEmpty(buyerId))
             {
                 Response.Cookies.Delete("buyerId");
-                return NotFound();
+                return Ok();
             }
 
             var getBasketRequest = new GetBasketQueryRequest { BuyerId = buyerId };

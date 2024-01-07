@@ -209,14 +209,14 @@ namespace VendorDeck.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "ba7d1643-90c8-43f4-9d94-9fc690d85182",
+                            ConcurrencyStamp = "10627d40-fed4-408a-96ee-52e3ae429c22",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "9be5e549-008a-41de-9fd4-1d26da24c3ff",
+                            ConcurrencyStamp = "6b083039-f9dc-4b43-9b9a-5e0be2b567ee",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -476,6 +476,9 @@ namespace VendorDeck.Persistence.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");

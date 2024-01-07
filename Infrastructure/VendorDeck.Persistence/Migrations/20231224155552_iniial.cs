@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace VendorDeck.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class iniial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,6 +63,8 @@ namespace VendorDeck.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BuyerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClientSecret = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -79,11 +81,12 @@ namespace VendorDeck.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false),
+                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -111,6 +114,33 @@ namespace VendorDeck.Persistence.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Address",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Zip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AppUserId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Address", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Address_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -199,6 +229,41 @@ namespace VendorDeck.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BuyerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderNumber = table.Column<int>(type: "int", nullable: false),
+                    SubTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DeliveryFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OrderStatus = table.Column<int>(type: "int", nullable: false),
+                    ShippingAddress_FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingAddress_Address2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingAddressCity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingAddressState = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingAddress_Zip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingAddressCountry = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingAddress_AppUserId = table.Column<int>(type: "int", nullable: true),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_ShippingAddress_AppUserId",
+                        column: x => x.ShippingAddress_AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BasketItems",
                 columns: table => new
                 {
@@ -227,39 +292,69 @@ namespace VendorDeck.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItem_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "a84b2463-b408-4d14-8a67-fe8e35879c43", "Member", "MEMBER" },
-                    { 2, "24813d04-5f8a-438c-8a7a-abeac3df4162", "Admin", "ADMIN" }
+                    { 1, "801e7c92-9b47-48b3-8454-6aad1d69e3f7", "Member", "MEMBER" },
+                    { 2, "1662a10b-78bc-4ff3-8f28-3c56c7a80306", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "Brand", "CreatedDate", "Description", "ImageUrl", "LastModifiedDate", "Name", "Price", "Stock", "Type" },
+                columns: new[] { "Id", "Brand", "CreatedDate", "Description", "ImageUrl", "LastModifiedDate", "Name", "Price", "PublicId", "Stock", "Type" },
                 values: new object[,]
                 {
-                    { 1, "Angular", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/sb-ang1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Angular Speedster Board 2000", 20000m, 100, "Boards" },
-                    { 2, "Angular", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.", "/images/products/sb-ang2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Green Angular Board 3000", 15000m, 100, "Boards" },
-                    { 3, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.", "/images/products/sb-core1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Core Board Speed Rush 3", 18000m, 100, "Boards" },
-                    { 4, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.", "/images/products/sb-core2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Net Core Super Board", 30000m, 100, "Boards" },
-                    { 5, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/sb-react1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "React Board Super Whizzy Fast", 25000m, 100, "Boards" },
-                    { 6, "TypeScript", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/sb-ts1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Typescript Entry Board", 12000m, 100, "Boards" },
-                    { 7, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/hat-core1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Core Blue Hat", 1000m, 100, "Hats" },
-                    { 8, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/hat-react1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Green React Woolen Hat", 8000m, 100, "Hats" },
-                    { 9, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/hat-react2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Purple React Woolen Hat", 1500m, 100, "Hats" },
-                    { 10, "VS Code", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/glove-code1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Blue Code Gloves", 1800m, 100, "Gloves" },
-                    { 11, "VS Code", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/glove-code2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Green Code Gloves", 1500m, 100, "Gloves" },
-                    { 12, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/glove-react1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Purple React Gloves", 1600m, 100, "Gloves" },
-                    { 13, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/glove-react2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Green React Gloves", 1400m, 100, "Gloves" },
-                    { 14, "Redis", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.", "/images/products/boot-redis1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Redis Red Boots", 25000m, 100, "Boots" },
-                    { 15, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/boot-core2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Core Red Boots", 18999m, 100, "Boots" },
-                    { 16, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.", "/images/products/boot-core1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Core Purple Boots", 19999m, 100, "Boots" },
-                    { 17, "Angular", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.", "/images/products/boot-ang2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Angular Purple Boots", 15000m, 100, "Boots" },
-                    { 18, "Angular", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.", "/images/products/boot-ang1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Angular Blue Boots", 18000m, 100, "Boots" }
+                    { 1, "Angular", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/sb-ang1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Angular Speedster Board 2000", 20000m, null, 100, "Boards" },
+                    { 2, "Angular", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.", "/images/products/sb-ang2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Green Angular Board 3000", 15000m, null, 100, "Boards" },
+                    { 3, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.", "/images/products/sb-core1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Core Board Speed Rush 3", 18000m, null, 100, "Boards" },
+                    { 4, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.", "/images/products/sb-core2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Net Core Super Board", 30000m, null, 100, "Boards" },
+                    { 5, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/sb-react1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "React Board Super Whizzy Fast", 25000m, null, 100, "Boards" },
+                    { 6, "TypeScript", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/sb-ts1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Typescript Entry Board", 12000m, null, 100, "Boards" },
+                    { 7, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/hat-core1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Core Blue Hat", 1000m, null, 100, "Hats" },
+                    { 8, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/hat-react1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Green React Woolen Hat", 8000m, null, 100, "Hats" },
+                    { 9, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/hat-react2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Purple React Woolen Hat", 1500m, null, 100, "Hats" },
+                    { 10, "VS Code", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/glove-code1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Blue Code Gloves", 1800m, null, 100, "Gloves" },
+                    { 11, "VS Code", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/glove-code2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Green Code Gloves", 1500m, null, 100, "Gloves" },
+                    { 12, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/glove-react1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Purple React Gloves", 1600m, null, 100, "Gloves" },
+                    { 13, "React", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/glove-react2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Green React Gloves", 1400m, null, 100, "Gloves" },
+                    { 14, "Redis", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.", "/images/products/boot-redis1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Redis Red Boots", 25000m, null, 100, "Boots" },
+                    { 15, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.", "/images/products/boot-core2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Core Red Boots", 18999m, null, 100, "Boots" },
+                    { 16, "NetCore", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.", "/images/products/boot-core1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Core Purple Boots", 19999m, null, 100, "Boots" },
+                    { 17, "Angular", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.", "/images/products/boot-ang2.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Angular Purple Boots", 15000m, null, 100, "Boots" },
+                    { 18, "Angular", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.", "/images/products/boot-ang1.png", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Angular Blue Boots", 18000m, null, 100, "Boots" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Address_AppUserId",
+                table: "Address",
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -309,11 +404,36 @@ namespace VendorDeck.Persistence.Migrations
                 name: "IX_BasketItems_ProductId",
                 table: "BasketItems",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItem_OrderId",
+                table: "OrderItem",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_Id",
+                table: "Orders",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_OrderNumber",
+                table: "Orders",
+                column: "OrderNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ShippingAddress_AppUserId",
+                table: "Orders",
+                column: "ShippingAddress_AppUserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Address");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -333,16 +453,22 @@ namespace VendorDeck.Persistence.Migrations
                 name: "BasketItems");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "OrderItem");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Baskets");
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

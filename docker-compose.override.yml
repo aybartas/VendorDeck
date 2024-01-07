@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  sqlserver:
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password12*
+    volumes:
+      - sqlserver_volume:/var/opt/mssql
+
+    ports:
+      - "1433:1433" 
+  vendordeck.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "5000:80"
+      - "5001:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

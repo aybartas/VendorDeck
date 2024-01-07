@@ -12,8 +12,8 @@ using VendorDeck.Persistence.Context;
 namespace VendorDeck.Persistence.Migrations
 {
     [DbContext(typeof(VendorDeckContext))]
-    [Migration("20230716165150_addres nullble fiels")]
-    partial class addresnullblefiels
+    [Migration("20231224155552_iniial")]
+    partial class iniial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -212,14 +212,14 @@ namespace VendorDeck.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "0550a40d-da69-4e79-b5af-86c5cbac7466",
+                            ConcurrencyStamp = "801e7c92-9b47-48b3-8454-6aad1d69e3f7",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "00162c88-f3a6-4c27-8850-ab8c8d4d27e4",
+                            ConcurrencyStamp = "1662a10b-78bc-4ff3-8f28-3c56c7a80306",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -313,11 +313,19 @@ namespace VendorDeck.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ClientSecret")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentIntentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -385,6 +393,10 @@ namespace VendorDeck.Persistence.Migrations
 
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
+
+                    b.Property<string>("PaymentIntentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(18,2)");
@@ -467,6 +479,9 @@ namespace VendorDeck.Persistence.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
